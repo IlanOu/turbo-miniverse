@@ -57,7 +57,7 @@ public class CarController : MonoBehaviour
         // Réduire la masse pour une sensation plus légère
         if (carRigidbody != null)
         {
-            carRigidbody.mass = 500f; // Masse réduite
+            // carRigidbody.mass = 500f; // Masse réduite
             carRigidbody.linearDamping = 0.2f; // Moins de résistance à l'air
             carRigidbody.angularDamping = 0.5f; // Moins de résistance aux rotations
             carRigidbody.centerOfMass = new Vector3(0, -0.5f, 0.1f); // Centre de masse très bas

@@ -206,7 +206,7 @@ Material:
     m_Ints: []
     m_Floats:
     - Boolean_0a5be01eb5a64018bea328348e70ad29: 0
-    - Boolean_15cb3704bf74416788bc2d112a6ac759: 0
+    - Boolean_15cb3704bf74416788bc2d112a6ac759: 1
     - Boolean_2104466b05db40c0b45563dee6b67a90: 0
     - Boolean_3dc53bea235e43ca9db7cc6ceaa2d7f7: 0
     - Boolean_51567e06c01f4bf2b192e1314a80da83: 0
