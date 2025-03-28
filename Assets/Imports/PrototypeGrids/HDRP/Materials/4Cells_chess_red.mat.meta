@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 135100b7ee4c8a447ba3f852f4d913b2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 194586
+  packageName: Customize Prototype Grid Shader (HDRP, URP)
+  packageVersion: 1.0
+  assetPath: Assets/PrototypeGrids/HDRP/Materials/4Cells_chess_red.mat
+  uploadId: 431277

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 18f81db7c3d178045851727d295038db
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 194586
+  packageName: Customize Prototype Grid Shader (HDRP, URP)
+  packageVersion: 1.0
+  assetPath: Assets/PrototypeGrids/HDRP/Materials/4Cells_default.mat
+  uploadId: 431277
