@@ -6849,17 +6849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0e6878c770a664b86a99830355904f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  driftThreshold: 0.5
-  maxMotorForce: 1500
-  brakeForce: 200
-  maxSteerAngle: 50
-  maxSpeed: 200
-  accelerationCurve: 0.5
-  additionalGravity: 20
-  driftFactor: 2
-  gripFactor: 1.8
-  driftAngleThreshold: 33
-  turnGripFactor: 0.5
+  config: {fileID: 0}
   frontLeftWheelCollider: {fileID: 828627646}
   frontRightWheelCollider: {fileID: 863295973}
   rearLeftWheelCollider: {fileID: 1562697162}
@@ -9068,7 +9058,6 @@ GameObject:
   - component: {fileID: 330585547}
   - component: {fileID: 330585550}
   - component: {fileID: 330585551}
-  - component: {fileID: 330585552}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9236,25 +9225,6 @@ MonoBehaviour:
   maxAdditionalFOV: 20
   fovLerpSpeed: 5
   maxSpeed: 200
---- !u!114 &330585552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c0b971e717e5894984eae2e5442318e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorSteps: 8
-  smoothing: 0.3
-  saturation: 1.2
-  contrast: 1.1
-  plasticHighlight: 0.2
-  toysShader: {fileID: 0}
-  toysMaterial: {fileID: 0}
 --- !u!1001 &335951192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16122,17 +16092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0e6878c770a664b86a99830355904f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  driftThreshold: 0.5
-  maxMotorForce: 1000
-  brakeForce: 2000
-  maxSteerAngle: 50
-  maxSpeed: 200
-  accelerationCurve: 0.5
-  additionalGravity: 20
-  driftFactor: 2
-  gripFactor: 1.8
-  driftAngleThreshold: 33
-  turnGripFactor: 0.7
+  config: {fileID: 0}
   frontLeftWheelCollider: {fileID: 601952360}
   frontRightWheelCollider: {fileID: 601952359}
   rearLeftWheelCollider: {fileID: 601952358}
@@ -50990,17 +50950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0e6878c770a664b86a99830355904f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  driftThreshold: 0.5
-  maxMotorForce: 1500
-  brakeForce: 200
-  maxSteerAngle: 50
-  maxSpeed: 200
-  accelerationCurve: 0.5
-  additionalGravity: 20
-  driftFactor: 2
-  gripFactor: 1.8
-  driftAngleThreshold: 33
-  turnGripFactor: 0.7
+  config: {fileID: 0}
   frontLeftWheelCollider: {fileID: 52845694}
   frontRightWheelCollider: {fileID: 636170849}
   rearLeftWheelCollider: {fileID: 1044849650}
