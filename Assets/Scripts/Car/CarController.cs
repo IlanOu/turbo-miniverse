@@ -27,6 +27,8 @@ public class CarController : MonoBehaviour
 
     private Rigidbody carRigidbody;
 
+    private bool hasBattery = true;
+    
     public bool isDrifting => _isDrifting;
 
     private void Start()
@@ -119,11 +121,27 @@ public class CarController : MonoBehaviour
 
     private void GetInput() 
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-        isBraking = Input.GetKey(KeyCode.Space);
-        currentSpeed = carRigidbody.linearVelocity.magnitude * 3.6f;
+        if (hasBattery)
+        {
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput = Input.GetAxis("Vertical");
+            isBraking = Input.GetKey(KeyCode.Space);
+            currentSpeed = carRigidbody.linearVelocity.magnitude * 3.6f;
+        }
+        else
+        {
+            horizontalInput = 0f;
+            verticalInput = 0f;
+            isBraking = false;
+            currentSpeed = 0f;
+        }
     }
+    
+    public bool IsAccelerating()
+    {
+        return hasBattery && Mathf.Abs(verticalInput) > 0.1f;
+    }
+
 
     private void HandleMotor() 
     {
@@ -222,5 +240,15 @@ public class CarController : MonoBehaviour
     public void SetTurnGripFactor(float value)
     {
         config.turnGripFactor = Mathf.Clamp(value, 0.1f, 1.0f);
+    }
+    
+    public void StopCar()
+    {
+        hasBattery = false;
+    }
+
+    public void StartCar()
+    {
+        hasBattery = true;
     }
 }

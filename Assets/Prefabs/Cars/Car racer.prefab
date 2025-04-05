@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3131794864603771667}
   m_Layer: 0
-  m_Name: BulletSpawnPoint
+  m_Name: GunPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 171617207698873671}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.375, z: 0}
+  m_LocalPosition: {x: 0, y: 1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -743,6 +743,7 @@ GameObject:
   - component: {fileID: 1886209314424109030}
   - component: {fileID: 529895375476463377}
   - component: {fileID: 2625830256975029979}
+  - component: {fileID: 4848503798541949283}
   m_Layer: 0
   m_Name: Car racer
   m_TagString: Player
@@ -816,6 +817,27 @@ MonoBehaviour:
   rearLeftWheelTransform: {fileID: 7228821656512128432}
   rearRightWheelTransform: {fileID: 6279072795921052461}
   speedText: {fileID: 0}
+--- !u!114 &4848503798541949283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5403891554750802186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85d7596024c4d03ae10de33395fe491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBattery: 100
+  currentBattery: 100
+  consumptionFactor: 0.5
+  batteryText: {fileID: 0}
+  disableOnEmpty:
+  - {fileID: 7801687317739891337}
+  - {fileID: 0}
+  decelerationFactor: 0.5
+  carController: {fileID: 2625830256975029979}
 --- !u!1 &6849899723014956905
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,6 +886,10 @@ MonoBehaviour:
   gunHoldPosition: {fileID: 3131794864603771667}
   availableGuns:
   - {fileID: 2844089315852055276, guid: 6c3d52821aa4b124594a94e3b2aa112a, type: 3}
+  autoAimRotationSpeed: 5
+  autoFireDistance: 50
+  aimHeightOffset: 0.5
+  targetTag: Mob
 --- !u!1 &7037294253018922379
 GameObject:
   m_ObjectHideFlags: 0

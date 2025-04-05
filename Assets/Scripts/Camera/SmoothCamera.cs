@@ -16,19 +16,15 @@ public class SmoothCamera : MonoBehaviour
     [SerializeField] private bool useDynamicCamera = true;
     [SerializeField] private float speedEffect = 0.01f;
     [SerializeField] private float maxSpeedEffect = 3f;
-    [SerializeField] private float tiltAngle = 5f;
-    [SerializeField] private float tiltLerpSpeed = 5f;
 
     // Privates variables
     private Vector3 targetPosition;
-    private Quaternion targetRotation;
-    private float currentTilt = 0f;
+    [HideInInspector] public Quaternion targetRotation;
     private Rigidbody targetRigidbody;
     private Vector3 lastTargetPosition;
     private Vector3 targetVelocity;
     private Vector3 lastCameraPosition;
     private Vector3 cameraVelocity;
-    private float horizontalInput;
 
     private void Start()
     {
@@ -50,9 +46,6 @@ public class SmoothCamera : MonoBehaviour
 
     private void Update()
     {
-        // Only get horizontal input 
-        horizontalInput = Input.GetAxis("Horizontal");
-        
         // Calculate target velocity for prediction
         if (!useFixedUpdate)
         {
@@ -87,14 +80,6 @@ public class SmoothCamera : MonoBehaviour
         Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight + (targetVelocity * 0.05f);
         targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
         
-        // Apply tilt for steering
-        if (useDynamicCamera)
-        {
-            float targetTilt = -horizontalInput * tiltAngle;
-            currentTilt = Mathf.Lerp(currentTilt, targetTilt, tiltLerpSpeed * deltaTime);
-            targetRotation *= Quaternion.Euler(0, 0, currentTilt);
-        }
-        
         // Apply rotation interpolation
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationLerpSpeed * deltaTime);
         
@@ -127,20 +112,5 @@ public class SmoothCamera : MonoBehaviour
         }
         
         return desiredPosition;
-    }
-    
-    // Function for visualizing trajectories in debug mode
-    private void OnDrawGizmos()
-    {
-        if (target != null && Application.isPlaying)
-        {
-            // Draw a line from the target to the camera
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(target.position, transform.position);
-            
-            // Draw a ray in the direction of the camera
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, transform.forward * 5f);
-        }
     }
 }
