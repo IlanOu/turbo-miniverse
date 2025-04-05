@@ -50771,6 +50771,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1886209314424109030, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
   m_PrefabInstance: {fileID: 1728274218394657823}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1957527073 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 529895375476463377, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+  m_PrefabInstance: {fileID: 1728274218394657823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1959705735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55070,12 +55075,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 292000404}
     - target: {fileID: 4848503798541949283, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: carRigidbody
+      value: 
+      objectReference: {fileID: 1957527073}
+    - target: {fileID: 4848503798541949283, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: consumptionFactor
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848503798541949283, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
       propertyPath: 'disableOnEmpty.Array.data[1]'
       value: 
       objectReference: {fileID: 330585552}
     - target: {fileID: 5403891554750802186, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
       propertyPath: m_Name
       value: Car racer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7801687317739891337, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

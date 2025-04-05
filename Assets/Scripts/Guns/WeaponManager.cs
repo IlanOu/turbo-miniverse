@@ -121,19 +121,28 @@ public class WeaponManager : MonoBehaviour
     {
         if (index < 0 || index >= availableGuns.Length)
             return;
-            
-        // Détruire l'arme actuelle
+
         if (currentGun != null)
-        {
             Destroy(currentGun.gameObject);
-        }
-        
-        // Instancier la nouvelle arme en tant qu'enfant de la position de tir
+
         GameObject gunObj = Instantiate(availableGuns[index], gunHoldPosition);
         gunObj.transform.localPosition = Vector3.zero;
         gunObj.transform.localRotation = Quaternion.identity;
-        
-        currentGun = gunObj.GetComponent<Gun>();
-        currentGunIndex = index;
+
+        Gun newGun = gunObj.GetComponent<Gun>();
+
+        // On initialise correctement le Gun
+        CarBattery battery = GetComponentInParent<CarBattery>();
+        if (newGun != null && battery != null)
+        {
+            // Option A: le GunConfig est déjà sur le prefab
+            newGun.Initialize(battery);
+
+            // Option B: si tu veux forcer un config via tableau
+            // newGun.Initialize(battery, gunConfigs[index]);
+        }
+
+        currentGun = newGun;
     }
+
 }

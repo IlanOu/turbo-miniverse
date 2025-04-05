@@ -19,13 +19,13 @@ public class CarBattery : MonoBehaviour
     [SerializeField] private float decelerationFactor = 0.5f;
 
     [Header("Car Controller Reference")]
-    [SerializeField] private CarController carController; // <- Ajout ici
+    [SerializeField] private CarController carController;
+    [SerializeField] private Rigidbody carRigidbody;
 
-    private Rigidbody rb;
+    private bool wasBatteryEmpty = false;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
         UpdateBatteryUI();
 
         if (carController == null)
@@ -42,7 +42,7 @@ public class CarBattery : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentBattery <= 0f && rb != null)
+        if (currentBattery <= 0f && carRigidbody != null)
         {
             ApplyEngineOffDeceleration();
         }
@@ -50,13 +50,23 @@ public class CarBattery : MonoBehaviour
 
     private void ConsumeBattery()
     {
-        if (rb == null || carController == null || !carController.IsAccelerating())
+        if (carRigidbody == null || carController == null || !carController.IsAccelerating())
             return;
 
-        float speed = rb.linearVelocity.magnitude;
+        float speed = carRigidbody.linearVelocity.magnitude;
         float consumption = speed * consumptionFactor * Time.deltaTime;
         currentBattery = Mathf.Max(currentBattery - consumption, 0f);
         UpdateBatteryUI();
+    }
+    
+    public bool TryConsumeEnergy(float amount)
+    {
+        if (currentBattery <= 0f || amount <= 0f)
+            return false;
+
+        currentBattery = Mathf.Max(currentBattery - amount, 0f);
+        UpdateBatteryUI();
+        return true;
     }
 
 
@@ -70,39 +80,33 @@ public class CarBattery : MonoBehaviour
 
     private void CheckBatteryStatus()
     {
-        if (currentBattery <= 0f)
+        bool isBatteryEmpty = currentBattery <= 0f;
+
+        // Éviter de répéter les actions si l’état n’a pas changé
+        if (isBatteryEmpty != wasBatteryEmpty)
         {
-            // Appel de StopCar
+            wasBatteryEmpty = isBatteryEmpty;
+
             if (carController != null)
             {
-                carController.StopCar();
+                if (isBatteryEmpty)
+                    carController.StopCar();
+                else
+                    carController.StartCar();
             }
 
             foreach (MonoBehaviour comp in disableOnEmpty)
             {
                 if (comp != null)
-                    comp.enabled = false;
-            }
-        }
-        else
-        {
-            if (carController != null)
-            {
-                carController.StartCar();
-            }
-            
-            foreach (MonoBehaviour comp in disableOnEmpty)
-            {
-                if (comp != null)
-                    comp.enabled = true;
+                    comp.enabled = !isBatteryEmpty;
             }
         }
     }
 
     private void ApplyEngineOffDeceleration()
     {
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, decelerationFactor * Time.fixedDeltaTime);
-        rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, decelerationFactor * Time.fixedDeltaTime);
+        carRigidbody.linearVelocity = Vector3.Lerp(carRigidbody.linearVelocity, Vector3.zero, decelerationFactor * Time.fixedDeltaTime);
+        carRigidbody.angularVelocity = Vector3.Lerp(carRigidbody.angularVelocity, Vector3.zero, decelerationFactor * Time.fixedDeltaTime);
     }
 
     public void RechargeBattery(float amount)

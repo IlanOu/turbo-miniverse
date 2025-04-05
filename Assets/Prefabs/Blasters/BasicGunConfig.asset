@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c380c86ea6fb4396a0cc6fe6e81fa5aa, type: 3}
+  m_Name: BasicGunConfig
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 6437492683520615136, guid: 57329b2d7f3a9d043beca21c0291eff8, type: 3}
+  bulletSpeed: 80
+  damage: 10
+  fireRate: 1
+  bulletSize: 15
+  energyCostPerShot: -1

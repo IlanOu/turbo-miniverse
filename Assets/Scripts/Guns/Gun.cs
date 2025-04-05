@@ -2,52 +2,57 @@
 
 public class Gun : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawnPoint; // Déjà dans le prefab de l'arme
+    [Header("Config")]
+    [SerializeField] private GunConfig config;
+    [SerializeField] private Transform bulletSpawnPoint;
 
-    [Header("Parameters")]
-    [SerializeField] private float bulletSpeed = 20f;
-    [SerializeField] private int damage = 10;
-    [SerializeField] private float fireRate = 0.2f;
-    [SerializeField] private float bulletSize = 1f;
-    
+    private CarBattery battery;
     private float nextFireTime = 0f;
-    
+    private float energyCost;
+
+    public float BulletSpeed => config != null ? config.bulletSpeed : 20f;
+    public Transform GetBulletSpawnPoint() => bulletSpawnPoint;
+
+    public void Initialize(CarBattery batteryRef, GunConfig newConfig = null)
+    {
+        if (newConfig != null)
+            config = newConfig;
+
+        battery = batteryRef;
+
+        energyCost = config.energyCostPerShot < 0f
+            ? (config.bulletSpeed * 0.01f) + (config.bulletSize * 0.1f)
+            : config.energyCostPerShot;
+    }
+
     public bool TryFire()
     {
-        if (Time.time < nextFireTime)
+        if (Time.time < nextFireTime || config == null)
             return false;
-            
-        // Instanciation de la balle
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation * Quaternion.Euler(90, 0, 0));
-        bullet.transform.localScale = Vector3.one * bulletSize;
-        
-        // Configuration de la balle
+
+        if (battery != null && !battery.TryConsumeEnergy(energyCost))
+            return false;
+
+        GameObject bullet = Instantiate(config.bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation * Quaternion.Euler(90, 0, 0));
+        bullet.transform.localScale = Vector3.one * config.bulletSize;
+
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent == null)
             bulletComponent = bullet.AddComponent<Bullet>();
-        bulletComponent.SetParameters(damage, bulletSpeed);
-        
-        // Récupérer la vélocité du véhicule parent pour compenser son mouvement
+        bulletComponent.SetParameters(config.damage, config.bulletSpeed);
+
         Rigidbody parentRb = GetComponentInParent<Rigidbody>();
         Vector3 parentVelocity = parentRb != null ? parentRb.linearVelocity : Vector3.zero;
-        
-        // Appliquer la vélocité calculée
+
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = bulletSpawnPoint.forward * bulletSpeed + parentVelocity;
+            rb.linearVelocity = bulletSpawnPoint.forward * config.bulletSpeed + parentVelocity;
         }
-        
-        // Détruire la balle après 5 secondes
+
         Destroy(bullet, 5f);
-        
-        nextFireTime = Time.time + fireRate;
+        nextFireTime = Time.time + config.fireRate;
+
         return true;
     }
-    
-    // Ajouts pour permettre l'accès à bulletSpeed et bulletSpawnPoint
-    public float BulletSpeed => bulletSpeed;
-    public Transform GetBulletSpawnPoint() => bulletSpawnPoint;
 }
