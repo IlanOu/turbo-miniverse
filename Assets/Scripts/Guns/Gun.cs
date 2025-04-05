@@ -3,7 +3,7 @@
 public class Gun : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private GunConfig config;
+    public GunConfig config;
     [SerializeField] private Transform bulletSpawnPoint;
 
     private CarBattery battery;
@@ -35,12 +35,7 @@ public class Gun : MonoBehaviour
 
         GameObject bullet = Instantiate(config.bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation * Quaternion.Euler(90, 0, 0));
         bullet.transform.localScale = Vector3.one * config.bulletSize;
-
-        Bullet bulletComponent = bullet.GetComponent<Bullet>();
-        if (bulletComponent == null)
-            bulletComponent = bullet.AddComponent<Bullet>();
-        bulletComponent.SetParameters(config.damage, config.bulletSpeed);
-
+        
         Rigidbody parentRb = GetComponentInParent<Rigidbody>();
         Vector3 parentVelocity = parentRb != null ? parentRb.linearVelocity : Vector3.zero;
 

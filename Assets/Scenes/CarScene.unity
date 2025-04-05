@@ -55091,6 +55091,10 @@ PrefabInstance:
       value: Car racer
       objectReference: {fileID: 0}
     - target: {fileID: 7801687317739891337, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: gunPrefab
+      value: 
+      objectReference: {fileID: 2844089315852055276, guid: 6c3d52821aa4b124594a94e3b2aa112a, type: 3}
+    - target: {fileID: 7801687317739891337, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}

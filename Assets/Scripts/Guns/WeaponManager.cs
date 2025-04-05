@@ -2,97 +2,90 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    [Header("Références & Configuration")]
+    [Header("References & Configuration")]
     [SerializeField] private Transform gunHoldPosition;
-    [SerializeField] private GameObject[] availableGuns; // Liste des prefabs d'armes disponibles
-    [SerializeField] private float autoAimRotationSpeed = 5f; // Vitesse d'orientation automatique
-    [SerializeField] private float autoFireDistance = 50f;      // Distance maximale pour tir automatique
-    [SerializeField] private float aimHeightOffset = 1.5f;        // Décalage vertical pour viser plus haut
-    [SerializeField] private string targetTag = "Mob";            // Tag de l'objet cible
+    [SerializeField] private GameObject gunPrefab;
+    [Tooltip("Vertical offset for the target")][SerializeField] private float aimHeightOffset = 1.5f;
+    [SerializeField] private string targetTag = "Mob";
 
-    private Gun currentGun;
-    private int currentGunIndex = 0;
+    private Gun _currentGun;
 
     void Start()
     {
-        EquipGun(0); // Équiper la première arme par défaut
+        EquipGun();
     }
 
     void Update()
     {
-        // Recherche de la cible la plus proche avec le tag "mob"
+        // Find the closest target with the "Mob" tag
         GameObject target = FindClosestTarget();
-        if (target != null && currentGun != null)
+        if (target != null && _currentGun != null)
         {
-            // On ajuste la position de la cible en y ajoutant un offset
+            // Adjust the target position by adding a vertical offset
             Vector3 adjustedTargetPos = target.transform.position + Vector3.up * aimHeightOffset;
             
-            // Calcul de la trajectoire balistique pour compenser la gravité
+            // Calculate the ballistic trajectory to compensate for gravity
             Vector3 ballisticVelocity = CalculateBallisticVelocity(
                 adjustedTargetPos, 
-                currentGun.GetBulletSpawnPoint().position, 
-                currentGun.BulletSpeed, 
+                _currentGun.GetBulletSpawnPoint().position, 
+                _currentGun.BulletSpeed, 
                 Mathf.Abs(Physics.gravity.y)
             );
             
-            // Déduire la direction à partir de la vélocité balistique
+            // Deduce the direction from the ballistic velocity
             Vector3 aimDirection = ballisticVelocity.normalized;
             
-            // Calculer la rotation cible en fonction de la direction calculée
+            // Calculate the target rotation based on the calculated direction
             Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
-            // Interpolation pour une rotation fluide
-            gunHoldPosition.rotation = Quaternion.Lerp(gunHoldPosition.rotation, targetRotation, autoAimRotationSpeed * Time.deltaTime);
+            // Interpolate for a smooth rotation
+            gunHoldPosition.rotation = Quaternion.Lerp(gunHoldPosition.rotation, targetRotation, _currentGun.config.autoAimRotationSpeed * Time.deltaTime);
             
-            // Tir automatique si la cible est dans la distance définie
-            if (Vector3.Distance(gunHoldPosition.position, target.transform.position) <= autoFireDistance)
+            // Automatic firing if the target is within the defined distance
+            if (Vector3.Distance(gunHoldPosition.position, target.transform.position) <= _currentGun.config.autoFireDistance)
             {
-                currentGun.TryFire();
+                _currentGun.TryFire();
             }
         }
-
-        // Changement manuel d'arme
-        if (Input.GetKeyDown(KeyCode.Alpha1)) EquipGun(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) EquipGun(1);
     }
 
     /// <summary>
-    /// Calcule la vélocité initiale nécessaire pour que le projectile atteigne la cible en tenant compte de la gravité.
+    /// Calculates the initial velocity required for the projectile to reach the target, taking into account gravity.
     /// </summary>
-    /// <param name="target">Position ajustée de la cible</param>
-    /// <param name="origin">Position d'origine (spawn de la balle)</param>
-    /// <param name="speed">Vitesse initiale du projectile</param>
-    /// <param name="gravity">Magnitude de la gravité</param>
-    /// <returns>Vélocité initiale sous forme de vecteur</returns>
+    /// <param name="target">Adjusted target position</param>
+    /// <param name="origin">Origin position (bullet spawn point)</param>
+    /// <param name="speed">Initial projectile speed</param>
+    /// <param name="gravity">Gravity magnitude</param>
+    /// <returns>Initial velocity as a vector</returns>
     Vector3 CalculateBallisticVelocity(Vector3 target, Vector3 origin, float speed, float gravity)
     {
         Vector3 toTarget = target - origin;
-        // Séparation en composante horizontale
+        // Separate into horizontal component
         Vector3 toTargetXZ = new Vector3(toTarget.x, 0, toTarget.z);
-        float d = toTargetXZ.magnitude; // Distance horizontale
-        float y = toTarget.y;           // Différence de hauteur
+        float d = toTargetXZ.magnitude; // Horizontal distance
+        float y = toTarget.y;           // Height difference
 
         float speedSqr = speed * speed;
-        // Calcul de la partie sous la racine carrée
+        // Calculate the part under the square root
         float underSqrt = speedSqr * speedSqr - gravity * (gravity * d * d + 2 * y * speedSqr);
         
-        // Si le discriminant est négatif, aucune solution réelle n'existe :
-        // On vise directement vers la cible ajustée.
+        // If the discriminant is negative, no real solution exists:
+        // Aim directly at the adjusted target.
         if (underSqrt < 0)
         {
             return (target - origin).normalized * speed;
         }
         
         float sqrt = Mathf.Sqrt(underSqrt);
-        // Calcul de l'angle de tir (solution pour l'angle le plus bas)
+        // Calculate the firing angle (solution for the lowest angle)
         float angle = Mathf.Atan((speedSqr - sqrt) / (gravity * d));
         
-        // Combinaison des composantes horizontale et verticale pour obtenir la vélocité initiale
+        // Combine horizontal and vertical components to get the initial velocity
         Vector3 velocity = toTargetXZ.normalized * speed * Mathf.Cos(angle) + Vector3.up * speed * Mathf.Sin(angle);
         return velocity;
     }
 
     /// <summary>
-    /// Recherche et renvoie la cible la plus proche ayant le tag "mob".
+    /// Finds and returns the closest target with the "Mob" tag.
     /// </summary>
     GameObject FindClosestTarget()
     {
@@ -115,34 +108,27 @@ public class WeaponManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Équipe l'arme correspondant à l'index fourni.
+    /// Equips the gun corresponding to the provided index.
     /// </summary>
-    public void EquipGun(int index)
+    public void EquipGun()
     {
-        if (index < 0 || index >= availableGuns.Length)
-            return;
+        if (_currentGun != null)
+            Destroy(_currentGun.gameObject);
 
-        if (currentGun != null)
-            Destroy(currentGun.gameObject);
-
-        GameObject gunObj = Instantiate(availableGuns[index], gunHoldPosition);
+        GameObject gunObj = Instantiate(gunPrefab, gunHoldPosition);
         gunObj.transform.localPosition = Vector3.zero;
         gunObj.transform.localRotation = Quaternion.identity;
 
         Gun newGun = gunObj.GetComponent<Gun>();
 
-        // On initialise correctement le Gun
+        // Initialize the new gun
         CarBattery battery = GetComponentInParent<CarBattery>();
         if (newGun != null && battery != null)
         {
-            // Option A: le GunConfig est déjà sur le prefab
             newGun.Initialize(battery);
-
-            // Option B: si tu veux forcer un config via tableau
-            // newGun.Initialize(battery, gunConfigs[index]);
         }
 
-        currentGun = newGun;
+        _currentGun = newGun;
     }
 
 }

@@ -6,7 +6,7 @@ public class CarBattery : MonoBehaviour
 {
     [Header("Battery Settings")]
     [SerializeField] private float maxBattery = 100f;
-    [SerializeField] private float currentBattery = 100f;
+    private float _currentBattery = 100f;
     [SerializeField] private float consumptionFactor = 0.5f;
 
     [Header("UI Elements")]
@@ -26,8 +26,9 @@ public class CarBattery : MonoBehaviour
 
     private void Start()
     {
+        FillBatteryToMax();
         UpdateBatteryUI();
-
+        
         if (carController == null)
         {
             Debug.LogWarning("🚨 CarBattery: La référence à CarController n’est pas assignée !");
@@ -42,7 +43,7 @@ public class CarBattery : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentBattery <= 0f && carRigidbody != null)
+        if (_currentBattery <= 0f && carRigidbody != null)
         {
             ApplyEngineOffDeceleration();
         }
@@ -55,16 +56,16 @@ public class CarBattery : MonoBehaviour
 
         float speed = carRigidbody.linearVelocity.magnitude;
         float consumption = speed * consumptionFactor * Time.deltaTime;
-        currentBattery = Mathf.Max(currentBattery - consumption, 0f);
+        _currentBattery = Mathf.Max(_currentBattery - consumption, 0f);
         UpdateBatteryUI();
     }
     
     public bool TryConsumeEnergy(float amount)
     {
-        if (currentBattery <= 0f || amount <= 0f)
+        if (_currentBattery <= 0f || amount <= 0f)
             return false;
 
-        currentBattery = Mathf.Max(currentBattery - amount, 0f);
+        _currentBattery = Mathf.Max(_currentBattery - amount, 0f);
         UpdateBatteryUI();
         return true;
     }
@@ -74,13 +75,13 @@ public class CarBattery : MonoBehaviour
     {
         if (batteryText != null)
         {
-            batteryText.text = "Battery: " + Mathf.RoundToInt(currentBattery) + " / " + Mathf.RoundToInt(maxBattery);
+            batteryText.text = "Battery: " + Mathf.RoundToInt(_currentBattery) + " / " + Mathf.RoundToInt(maxBattery);
         }
     }
 
     private void CheckBatteryStatus()
     {
-        bool isBatteryEmpty = currentBattery <= 0f;
+        bool isBatteryEmpty = _currentBattery <= 0f;
 
         // Éviter de répéter les actions si l’état n’a pas changé
         if (isBatteryEmpty != wasBatteryEmpty)
@@ -111,12 +112,25 @@ public class CarBattery : MonoBehaviour
 
     public void RechargeBattery(float amount)
     {
-        currentBattery = Mathf.Clamp(currentBattery + amount, 0f, maxBattery);
+        _currentBattery = Mathf.Clamp(_currentBattery + amount, 0f, maxBattery);
         UpdateBatteryUI();
     }
 
     public bool IsBatteryEmpty()
     {
-        return currentBattery <= 0f;
+        return _currentBattery <= 0f;
+    }
+    
+    public void SetMaxBattery(float newMaxBattery)
+    {
+        maxBattery = newMaxBattery;
+        _currentBattery = Mathf.Clamp(_currentBattery, 0f, maxBattery);
+        UpdateBatteryUI();
+    }
+    
+    public void FillBatteryToMax()
+    {
+        _currentBattery = maxBattery;
+        UpdateBatteryUI();
     }
 }

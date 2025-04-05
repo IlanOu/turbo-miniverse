@@ -9,6 +9,9 @@ public class GunConfig : ScriptableObject
     public int damage = 10;
     public float fireRate = 0.2f;
     public float bulletSize = 1f;
+    
+    public float autoAimRotationSpeed = 5f;
+    public float autoFireDistance = 50f;
 
     [Header("Battery")]
     public float energyCostPerShot = -1f; // -1 = auto-calc
