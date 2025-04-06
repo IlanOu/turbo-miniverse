@@ -1,31 +1,47 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GarageTabManager : MonoBehaviour
 {
-    [Header("Tab Buttons")]
-    public Button carsTabButton;
-    public Button gunsTabButton;
-    public Button stationTabButton;
+    [Header("Toggle Group Parent")]
+    [SerializeField] private ToggleGroup tabToggleGroup;
 
-    [Header("Tab Panels")]
-    public GameObject carsPanel;
-    public GameObject gunsPanel;
-    public GameObject stationPanel;
+    [Header("Panels associés à chaque tab")]
+    [SerializeField] private List<GameObject> tabPanels = new List<GameObject>();
 
-    private void Start()
+    private List<Toggle> tabToggles = new List<Toggle>();
+
+    private void Awake()
     {
-        carsTabButton.onClick.AddListener(() => ShowTab("Cars"));
-        gunsTabButton.onClick.AddListener(() => ShowTab("Guns"));
-        stationTabButton.onClick.AddListener(() => ShowTab("Station"));
+        // Récupérer dynamiquement tous les Toggles enfants du groupe
+        tabToggles.Clear();
+        foreach (Transform child in tabToggleGroup.transform)
+        {
+            Toggle toggle = child.GetComponent<Toggle>();
+            if (toggle != null)
+            {
+                tabToggles.Add(toggle);
+                toggle.group = tabToggleGroup;
 
-        ShowTab("Cars"); // Onglet par défaut
+                int index = tabToggles.Count - 1;
+                toggle.onValueChanged.AddListener((isOn) =>
+                {
+                    if (isOn)
+                        ShowTab(index);
+                });
+            }
+        }
+
+        // Afficher le premier onglet par défaut
+        ShowTab(0);
     }
 
-    public void ShowTab(string tabName)
+    private void ShowTab(int index)
     {
-        carsPanel.SetActive(tabName == "Cars");
-        gunsPanel.SetActive(tabName == "Guns");
-        stationPanel.SetActive(tabName == "Station");
+        for (int i = 0; i < tabPanels.Count; i++)
+        {
+            tabPanels[i].SetActive(i == index);
+        }
     }
 }

@@ -1,49 +1,59 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class GarageSlotSelector : MonoBehaviour
 {
-    private List<Button> slotButtons = new List<Button>();
-    private int selectedSlotIndex = -1;
+    [Header("Toggle Group Parent")]
+    [SerializeField] private ToggleGroup toggleGroup;
 
-    public delegate void OnSlotSelectedDelegate(int index);
-    public event OnSlotSelectedDelegate OnSlotSelected;
+    [Header("Slots sélectionnés dynamiquement")]
+    [SerializeField] private List<Toggle> slotToggles = new List<Toggle>();
 
-    private void Start()
+    private void Awake()
     {
-        // Récupère automatiquement tous les boutons enfants
-        slotButtons.AddRange(GetComponentsInChildren<Button>());
+        if (toggleGroup == null)
+            toggleGroup = GetComponent<ToggleGroup>();
 
-        for (int i = 0; i < slotButtons.Count; i++)
+        // Récupérer tous les Toggles enfants
+        slotToggles.Clear();
+        foreach (Transform child in transform)
         {
-            int index = i;
-            slotButtons[i].onClick.AddListener(() => SelectSlot(index));
-        }
+            Toggle toggle = child.GetComponent<Toggle>();
+            if (toggle != null)
+            {
+                slotToggles.Add(toggle);
+                toggle.group = toggleGroup;
 
-        // Optionnel : sélectionne automatiquement le premier slot au démarrage
-        if (slotButtons.Count > 0)
-        {
-            SelectSlot(0);
-        }
-    }
-
-    public void SelectSlot(int index)
-    {
-        selectedSlotIndex = index;
-        OnSlotSelected?.Invoke(index);
-        // UpdateVisualFeedback();
-    }
-
-    private void UpdateVisualFeedback()
-    {
-        for (int i = 0; i < slotButtons.Count; i++)
-        {
-            ColorBlock cb = slotButtons[i].colors;
-            cb.normalColor = (i == selectedSlotIndex) ? Color.cyan : Color.white;
-            slotButtons[i].colors = cb;
+                // Get the first toggle and set it as selected by default
+                if (slotToggles.Count == 1)
+                    toggle.isOn = true;
+                
+                // Abonnement à l'événement de sélection
+                toggle.onValueChanged.AddListener((isOn) => {
+                    if (isOn)
+                        OnSlotSelected(toggle);
+                });
+            }
         }
     }
 
-    public int GetSelectedSlot() => selectedSlotIndex;
+    private void OnSlotSelected(Toggle selectedToggle)
+    {
+        int index = slotToggles.IndexOf(selectedToggle);
+        Debug.Log($"🟢 Slot sélectionné : Slot #{index + 1}");
+
+        // Appel à une méthode externe pour mettre à jour les stats ou l'UI
+        GarageUIManager.Instance?.UpdateStatsForSlot(index); // Par exemple
+    }
+
+    public int GetSelectedSlotIndex()
+    {
+        for (int i = 0; i < slotToggles.Count; i++)
+        {
+            if (slotToggles[i].isOn)
+                return i;
+        }
+        return -1;
+    }
 }
