@@ -1,18 +1,50 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class GarageUIManager : MonoBehaviour
+namespace Menu
 {
-    public static GarageUIManager Instance;
-
-    private void Awake()
+    [System.Serializable]
+    public class CarConfigEntry
     {
-        if (Instance == null)
-            Instance = this;
+        public CarConfig carConfig;
+        public GameObject carPrefab;
     }
-
-    public void UpdateStatsForSlot(int slotIndex)
+    
+    /// <summary>
+    /// Manages the garage UI, including car, gun, and station slots.
+    /// </summary>
+    public class GarageUIManager : MonoBehaviour
     {
-        Debug.Log($"🛠️ Mise à jour des stats pour le slot {slotIndex}");
-        // Ici tu modifies les valeurs dans la partie Stats and Parameters
+        #region Serialized Fields
+        [Header("Prefabs")]
+        [SerializeField] private GameObject slotPrefab;
+
+        [Header("Slot Lists")]
+        [SerializeField] private GameObject carSlotList;
+        [SerializeField] private GameObject gunSlotList;
+        [SerializeField] private GameObject stationSlotList;
+
+        [Header("Buttons")]
+        [SerializeField] private GameObject parametersBtnList;
+
+        [Header("Configs")]
+        [Tooltip("Liste des configurations de voiture")]
+        [SerializeField] private List<CarConfigEntry> carConfigs;
+        #endregion
+        
+        private void Start()
+        {
+            foreach (var carConfigEntry in carConfigs)
+            {
+                GameObject slot = Instantiate(slotPrefab, carSlotList.transform);
+                slot.GetComponent<Toggle>().onValueChanged.AddListener(OnSlotSelected);
+            }
+        }
+        
+        private void OnSlotSelected(bool arg0)
+        {
+            parametersBtnList.SetActive(arg0);
+        }
     }
 }

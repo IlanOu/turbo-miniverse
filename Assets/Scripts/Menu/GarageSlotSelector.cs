@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,8 +44,6 @@ public class GarageSlotSelector : MonoBehaviour
         int index = slotToggles.IndexOf(selectedToggle);
         Debug.Log($"🟢 Slot sélectionné : Slot #{index + 1}");
 
-        // Appel à une méthode externe pour mettre à jour les stats ou l'UI
-        GarageUIManager.Instance?.UpdateStatsForSlot(index); // Par exemple
     }
 
     public int GetSelectedSlotIndex()

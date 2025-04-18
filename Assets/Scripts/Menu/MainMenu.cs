@@ -3,40 +3,34 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private Button garageButton;
-    [SerializeField] private GameObject garageMenuPanel;
-    [SerializeField] private Button menuButton;
+    [SerializeField] private Button playButton;
+    [SerializeField] private string playScene;
     
-    [SerializeField] private CameraPresets cameraPresets;
+    [Space(10)]
+    [SerializeField] private Button quitButton;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        CloseGarageMenu();
-        garageButton.onClick.AddListener(DisplayGarageMenu);
-        menuButton.onClick.AddListener(CloseGarageMenu);
         
-        if (cameraPresets != null)
-            cameraPresets.SetCameraPosition(0);
+        playButton.onClick.AddListener(Play);
+        quitButton.onClick.AddListener(Quit);
     }
     
-    void DisplayGarageMenu()
+    private void Play()
     {
-        mainMenuPanel.SetActive(false);
-        garageMenuPanel.SetActive(true);
-        
-        if (cameraPresets != null)
-            cameraPresets.SmoothToCameraPosition(1);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(playScene);
     }
     
-    void CloseGarageMenu()
+    private void Quit()
     {
-        mainMenuPanel.SetActive(true);
-        garageMenuPanel.SetActive(false);
-        
-        if (cameraPresets != null)
-            cameraPresets.SmoothToCameraPosition(0);
+# if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+# else
+        Application.Quit();
+# endif
     }
-
+    
+    
+    
+    
 }
