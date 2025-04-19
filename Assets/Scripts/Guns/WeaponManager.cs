@@ -8,7 +8,9 @@ namespace Guns
         [SerializeField] private Transform gunHoldPosition;
         [SerializeField] private GameObject gunPrefab;
         [SerializeField] private string targetTag = "Mob";
-
+        [SerializeField] private float minDist = 50f;
+        
+        
         private Shooter _currentGun;
         private Transform _currentTarget;
         private Rigidbody currentTargetRb;
@@ -24,25 +26,22 @@ namespace Guns
             if (targetGo == null) return;
             if (_currentGun == null) return;
             
-            var targetPos = targetGo.transform.position;
             var targetRb = targetGo.GetComponent<Rigidbody>();
 
-            _currentGun.AimAtMovingTarget(targetPos, targetRb.linearVelocity);
-            _currentGun.TryShootAt(targetPos);
+            _currentGun.AimAtMovingTarget(targetGo, targetRb);
+            _currentGun.TryShootAt(targetGo);
         }
 
         GameObject FindClosestTarget()
         {
             GameObject[] targets = GameObject.FindGameObjectsWithTag(targetTag);
             GameObject closest = null;
-            float minDist = Mathf.Infinity;
 
             foreach (var t in targets)
             {
-                float dist = Vector3.SqrMagnitude(t.transform.position - gunHoldPosition.position);
+                float dist = Vector3.Distance(t.transform.position, gunHoldPosition.position);
                 if (dist < minDist)
                 {
-                    minDist = dist;
                     closest = t;
                 }
             }

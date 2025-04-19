@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c380c86ea6fb4396a0cc6fe6e81fa5aa, type: 3}
   m_Name: EnemyGunConfig
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 8616377786145308466, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
+  bulletPrefab: {fileID: 8668897812704464033, guid: 4fc78d9b54e3b9f44b5f9caf78faf7f6, type: 3}
   bulletSpeed: 80
   damage: 10
   fireRate: 1

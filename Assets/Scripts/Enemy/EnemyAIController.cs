@@ -31,7 +31,6 @@ namespace Enemy
                 GameObject targetGo = GameObject.FindWithTag("Player");
                 if (targetGo == null) return;
 
-                var targetPos = targetGo.transform.position;
                 var targetRb = targetGo.GetComponent<Rigidbody>();
 
                 var configWrapper = GetComponent<IShooterConfig>();
@@ -40,8 +39,8 @@ namespace Enemy
                 else
                     shooter.config = configWrapper;
                 
-                shooter.AimAtMovingTarget(targetPos, targetRb.linearVelocity);
-                shooter.TryShootAt(targetPos);
+                shooter.AimAtMovingTarget(targetGo, targetRb);
+                shooter.TryShootAt(targetGo);
             }
         }
     }

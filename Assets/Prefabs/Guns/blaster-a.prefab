@@ -115,6 +115,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawnPoint: {fileID: 4564364324639756334}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &7637626394962187721
 MonoBehaviour:
   m_ObjectHideFlags: 0

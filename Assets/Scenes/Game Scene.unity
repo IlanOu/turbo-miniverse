@@ -1209,7 +1209,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198976574}
   serializedVersion: 4
-  m_Mass: 300
+  m_Mass: 30
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1241,6 +1241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawnPoint: {fileID: 1495072871}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &198976587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6134,6 +6137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Car racer
       objectReference: {fileID: 0}
+    - target: {fileID: 7801687317739891337, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: minDist
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6568,63 +6575,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &9169055675337802575
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8616377786145308466, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_Name
-      value: bullet-foam-tip
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8996034115529713032, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7c2e0421c896c024f992f77e8e07c99e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -6639,6 +6589,5 @@ SceneRoots:
   - {fileID: 1728274218394657823}
   - {fileID: 1387701306}
   - {fileID: 938755605}
-  - {fileID: 9169055675337802575}
   - {fileID: 1855535091}
   - {fileID: 198976579}
