@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220bc474f6904119a4ef2470cdc42ee2, type: 3}
+  m_Name: Test CarConfig
+  m_EditorClassIdentifier: 
+  maxMotorForce: 1500
+  brakeForce: 200
+  maxSteerAngle: 50
+  maxSpeed: 200
+  accelerationCurve: 0.5
+  additionalGravity: 20
+  driftFactor: 2
+  gripFactor: 1.8
+  driftAngleThreshold: 33
+  turnGripFactor: 0.7

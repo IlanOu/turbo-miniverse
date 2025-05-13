@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Builds;
 using Car;
@@ -56,15 +57,22 @@ namespace Menu
     /// </summary>
     public class GarageUIManager : MonoBehaviour
     {
-        // Délegates
-        public delegate void CarConfigSelectedHandler(CarConfigEntry config);
-        public delegate void GunConfigSelectedHandler(GunConfigEntry config);
-        public delegate void StationConfigSelectedHandler(StationConfigEntry config);
-
-        // Evénements
-        public event CarConfigSelectedHandler OnCarConfigSelected;
-        public event GunConfigSelectedHandler OnGunConfigSelected;
-        public event StationConfigSelectedHandler OnStationConfigSelected;
+        
+        
+        public void SetCurrentCarConfig(CarConfigEntry config)
+        {
+            currentCarConfig = config;
+        }
+    
+        public void SetCurrentGunConfig(GunConfigEntry config)
+        {
+            currentGunConfig = config;
+        }
+    
+        public void SetCurrentStationConfig(StationConfigEntry config)
+        {
+            currentStationConfig = config;
+        }
         
         [Serializable]
         private class SlotGroup
@@ -115,8 +123,26 @@ namespace Menu
         [Tooltip("Liste des stations")]
         [SerializeField] private List<StationConfigEntry> stationConfigs = new List<StationConfigEntry>();
         #endregion
+        
+        public List<CarConfigEntry> CarConfigs => carConfigs;
+        public List<GunConfigEntry> GunConfigs => gunConfigs;
+        public List<StationConfigEntry> StationConfigs => stationConfigs;
 
         private Toggle currentSelectedSlot;
+        
+        // Délegates
+        public delegate void CarConfigSelectedHandler(CarConfigEntry config);
+        public delegate void GunConfigSelectedHandler(GunConfigEntry config);
+        public delegate void StationConfigSelectedHandler(StationConfigEntry config);
+
+        // Evénements
+        public event CarConfigSelectedHandler OnCarConfigSelected;
+        public event GunConfigSelectedHandler OnGunConfigSelected;
+        public event StationConfigSelectedHandler OnStationConfigSelected;
+        
+        private CarConfigEntry currentCarConfig;
+        private GunConfigEntry currentGunConfig;
+        private StationConfigEntry currentStationConfig;
         
         private void Awake()
         {
@@ -219,10 +245,39 @@ namespace Menu
                     slotText.text = config.DisplayName;
                 }
 
+                // Vérifier si ce slot correspond à la configuration actuelle
+                bool shouldBeSelected = false;
+                if (config is CarConfigEntry carConfig && currentCarConfig != null)
+                {
+                    shouldBeSelected = carConfig.CarConfig == currentCarConfig.CarConfig;
+                }
+                else if (config is GunConfigEntry gunConfig && currentGunConfig != null)
+                {
+                    shouldBeSelected = gunConfig.GunConfig == currentGunConfig.GunConfig;
+                }
+                else if (config is StationConfigEntry stationConfig && currentStationConfig != null)
+                {
+                    shouldBeSelected = stationConfig.Prefab == currentStationConfig.Prefab;
+                }
+
                 // Stocker la référence à la configuration dans le slot
                 slotToggle.onValueChanged.AddListener((isOn) => OnSlotSelected(slotToggle, isOn, config));
                 slotGroup.AddSlot(slotToggle);
+                
+                // Important: définir isOn après avoir ajouté le listener pour éviter de déclencher l'événement
+                if (shouldBeSelected)
+                {
+                    // Utiliser un délai d'une frame pour éviter les problèmes de timing
+                    StartCoroutine(SelectToggleNextFrame(slotToggle));
+                }
             }
+        }
+        
+        private IEnumerator SelectToggleNextFrame(Toggle toggle)
+        {
+            yield return null; // Attendre une frame
+            toggle.isOn = true;
+            currentSelectedSlot = toggle;
         }
         
         private void OnSlotSelected<T>(Toggle toggle, bool isOn, T config) where T : IConfigEntry
@@ -234,24 +289,27 @@ namespace Menu
                 {
                     currentSelectedSlot.isOn = false;
                 }
-        
+    
                 currentSelectedSlot = toggle;
                 parametersBtnList.SetActive(true);
-        
-                // Déclencher l'événement approprié selon le type de configuration
+    
+                // Mettre à jour la configuration actuelle et déclencher l'événement
                 if (config is CarConfigEntry carConfig)
                 {
+                    currentCarConfig = carConfig;
                     OnCarConfigSelected?.Invoke(carConfig);
                 }
                 else if (config is GunConfigEntry gunConfig)
                 {
+                    currentGunConfig = gunConfig;
                     OnGunConfigSelected?.Invoke(gunConfig);
                 }
                 else if (config is StationConfigEntry stationConfig)
                 {
+                    currentStationConfig = stationConfig;
                     OnStationConfigSelected?.Invoke(stationConfig);
                 }
-        
+    
                 Debug.Log($"Selected: {config.DisplayName}");
             }
             else if (toggle == currentSelectedSlot)

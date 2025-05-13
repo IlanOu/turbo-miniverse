@@ -21,6 +21,35 @@ namespace Menu
                 garageUI = GetComponent<GarageUIManager>();
             }
         
+            // Initialiser les configurations actuelles
+            if (carManager != null && carManager.CurrentConfig != null)
+            {
+                // Trouver l'entrée de configuration correspondante
+                var carConfigEntry = FindCarConfigEntry(carManager.CurrentConfig);
+                if (carConfigEntry != null)
+                {
+                    garageUI.SetCurrentCarConfig(carConfigEntry);
+                }
+            }
+        
+            if (gunManager != null && gunManager.CurrentConfig != null)
+            {
+                var gunConfigEntry = FindGunConfigEntry(gunManager.CurrentConfig);
+                if (gunConfigEntry != null)
+                {
+                    garageUI.SetCurrentGunConfig(gunConfigEntry);
+                }
+            }
+        
+            if (stationManager != null && stationManager.CurrentStationPrefab != null)
+            {
+                var stationConfigEntry = FindStationConfigEntry(stationManager.CurrentStationPrefab);
+                if (stationConfigEntry != null)
+                {
+                    garageUI.SetCurrentStationConfig(stationConfigEntry);
+                }
+            }
+        
             // S'abonner aux événements de sélection
             garageUI.OnCarConfigSelected += ApplyCarConfig;
             garageUI.OnGunConfigSelected += ApplyGunConfig;
@@ -63,6 +92,42 @@ namespace Menu
                 stationManager.SpawnStation(config.Prefab);
                 Debug.Log($"Applied station config: {config.DisplayName}");
             }
+        }
+        
+        private CarConfigEntry FindCarConfigEntry(CarConfig config)
+        {
+            foreach (var entry in garageUI.CarConfigs)
+            {
+                if (entry.CarConfig == config)
+                {
+                    return entry;
+                }
+            }
+            return null;
+        }
+        
+        private GunConfigEntry FindGunConfigEntry(GunConfig config)
+        {
+            foreach (var entry in garageUI.GunConfigs)
+            {
+                if (entry.GunConfig == config)
+                {
+                    return entry;
+                }
+            }
+            return null;
+        }
+        
+        private StationConfigEntry FindStationConfigEntry(GameObject prefab)
+        {
+            foreach (var entry in garageUI.StationConfigs)
+            {
+                if (entry.Prefab == prefab)
+                {
+                    return entry;
+                }
+            }
+            return null;
         }
     }
 }
