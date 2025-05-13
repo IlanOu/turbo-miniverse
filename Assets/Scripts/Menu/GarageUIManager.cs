@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Builds;
+using Car;
 using Guns;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,6 +56,16 @@ namespace Menu
     /// </summary>
     public class GarageUIManager : MonoBehaviour
     {
+        // Délegates
+        public delegate void CarConfigSelectedHandler(CarConfigEntry config);
+        public delegate void GunConfigSelectedHandler(GunConfigEntry config);
+        public delegate void StationConfigSelectedHandler(StationConfigEntry config);
+
+        // Evénements
+        public event CarConfigSelectedHandler OnCarConfigSelected;
+        public event GunConfigSelectedHandler OnGunConfigSelected;
+        public event StationConfigSelectedHandler OnStationConfigSelected;
+        
         [Serializable]
         private class SlotGroup
         {
@@ -222,11 +234,24 @@ namespace Menu
                 {
                     currentSelectedSlot.isOn = false;
                 }
-                
+        
                 currentSelectedSlot = toggle;
                 parametersBtnList.SetActive(true);
-                
-                // Ici, vous pouvez ajouter du code pour afficher les détails de la configuration sélectionnée
+        
+                // Déclencher l'événement approprié selon le type de configuration
+                if (config is CarConfigEntry carConfig)
+                {
+                    OnCarConfigSelected?.Invoke(carConfig);
+                }
+                else if (config is GunConfigEntry gunConfig)
+                {
+                    OnGunConfigSelected?.Invoke(gunConfig);
+                }
+                else if (config is StationConfigEntry stationConfig)
+                {
+                    OnStationConfigSelected?.Invoke(stationConfig);
+                }
+        
                 Debug.Log($"Selected: {config.DisplayName}");
             }
             else if (toggle == currentSelectedSlot)

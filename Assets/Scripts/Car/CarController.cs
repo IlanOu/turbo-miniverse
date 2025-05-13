@@ -12,9 +12,9 @@ namespace Car
         private float _currentSpeed = 0f;
         private bool _isDrifting = false;
 
-        [Header("Configuration")]
-        [SerializeField] private CarConfig config;
-
+        [Header("Configuration")] 
+        public CarConfig config;
+        
         [Header("Car Components")]
         // Wheel Colliders
         [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;

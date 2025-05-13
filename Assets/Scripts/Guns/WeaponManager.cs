@@ -10,13 +10,24 @@ namespace Guns
         [SerializeField] private string targetTag = "Mob";
         [SerializeField] private float minDist = 50f;
         
+        [Header("Configuration")]
+        [SerializeField] private GunConfig defaultGunConfig;
         
         private Shooter _currentGun;
         private Transform _currentTarget;
         private Rigidbody currentTargetRb;
+        
+        // Propriété publique pour définir la configuration du gun
+        public GunConfig CurrentGunConfig { get; set; }
 
         void Start()
         {
+            // Utiliser la configuration par défaut si aucune n'est définie
+            if (CurrentGunConfig == null)
+            {
+                CurrentGunConfig = defaultGunConfig;
+            }
+            
             EquipGun();
         }
 
@@ -59,12 +70,27 @@ namespace Guns
 
             _currentGun = gunObj.GetComponent<Shooter>();
 
-            var configWrapper = gunObj.GetComponent<IShooterConfig>();
+            var configWrapper = gunObj.GetComponent<GunConfigWrapper>();
             if (configWrapper == null)
-                Debug.LogError("Le gunPrefab ne contient pas de IShooterConfig !");
+            {
+                Debug.LogError("Le gunPrefab ne contient pas de GunConfigWrapper !");
+            }
             else
+            {
+                // Assigner la configuration au wrapper
+                configWrapper.config = CurrentGunConfig;
                 _currentGun.config = configWrapper;
+            }
         }
-
+        
+        // Méthode publique pour changer la configuration et réinstancier l'arme
+        public void ChangeGunConfig(GunConfig newConfig)
+        {
+            if (newConfig != null)
+            {
+                CurrentGunConfig = newConfig;
+                EquipGun();
+            }
+        }
     }
 }
