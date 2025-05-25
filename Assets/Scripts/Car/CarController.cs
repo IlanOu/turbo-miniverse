@@ -15,6 +15,9 @@ namespace Car
         [Header("Configuration")] 
         public CarConfig config;
         
+        [Header("Physics")]
+        [SerializeField] private Transform centerOfMassTransform;
+        
         [Header("Car Components")]
         // Wheel Colliders
         [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
@@ -26,7 +29,7 @@ namespace Car
 
         // UI Elements
         [SerializeField] private TextMeshProUGUI speedText;
-
+        
         private Rigidbody _carRigidbody;
 
         private bool _hasBattery = true;
@@ -36,16 +39,26 @@ namespace Car
         private void Start()
         {
             _carRigidbody = GetComponent<Rigidbody>();
-        
+
             if (_carRigidbody != null)
             {
                 _carRigidbody.linearDamping = 0.2f;
                 _carRigidbody.angularDamping = 0.5f;
-                _carRigidbody.centerOfMass = new Vector3(0, -0.5f, 0.1f);
-            }
         
+                // Utiliser la position du Transform si assigné, sinon valeur par défaut
+                if (centerOfMassTransform != null)
+                {
+                    _carRigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMassTransform.position);
+                }
+                else
+                {
+                    _carRigidbody.centerOfMass = new Vector3(0, -0.5f, 0.1f);
+                }
+            }
+
             ConfigureWheelColliders();
         }
+
 
         private void ConfigureWheelColliders()
         {

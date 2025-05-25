@@ -17,12 +17,19 @@ public class SmoothCamera : MonoBehaviour
     [SerializeField] private float speedEffect = 0.01f;
     [SerializeField] private float maxSpeedEffect = 3f;
 
+    [Header("Anti-Shake Settings")]
+    [SerializeField] private bool useAntiShake = true;
+    [SerializeField] private float shakeThreshold = 0.5f;
+    [SerializeField] private float antiShakeStrength = 0.8f;
+    [SerializeField] private float velocitySmoothing = 10f;
+
     // Privates variables
     private Vector3 targetPosition;
     [HideInInspector] public Quaternion targetRotation;
     private Rigidbody targetRigidbody;
     private Vector3 lastTargetPosition;
     private Vector3 targetVelocity;
+    private Vector3 smoothedVelocity;
     private Vector3 lastCameraPosition;
     private Vector3 cameraVelocity;
 
@@ -37,6 +44,7 @@ public class SmoothCamera : MonoBehaviour
         targetRigidbody = target.GetComponent<Rigidbody>();
         lastTargetPosition = target.position;
         lastCameraPosition = transform.position;
+        smoothedVelocity = Vector3.zero;
         
         // Set camera position on target on start
         transform.position = CalculateTargetPosition();
@@ -46,7 +54,6 @@ public class SmoothCamera : MonoBehaviour
 
     private void Update()
     {
-        // Calculate target velocity for prediction
         if (!useFixedUpdate)
         {
             UpdateCamera(Time.deltaTime);
@@ -66,22 +73,46 @@ public class SmoothCamera : MonoBehaviour
         if (target == null)
             return;
         
-        // Calculate target velocity
-        targetVelocity = (target.position - lastTargetPosition) / deltaTime;
+        // Calculate raw target velocity
+        Vector3 rawVelocity = (target.position - lastTargetPosition) / deltaTime;
         lastTargetPosition = target.position;
+        
+        // Apply anti-shake filtering
+        if (useAntiShake)
+        {
+            // Smooth the velocity to reduce jitter
+            smoothedVelocity = Vector3.Lerp(smoothedVelocity, rawVelocity, velocitySmoothing * deltaTime);
+            
+            // Use smoothed velocity if the raw velocity change is too sudden (shake detection)
+            Vector3 velocityDifference = rawVelocity - smoothedVelocity;
+            if (velocityDifference.magnitude > shakeThreshold)
+            {
+                targetVelocity = Vector3.Lerp(rawVelocity, smoothedVelocity, antiShakeStrength);
+            }
+            else
+            {
+                targetVelocity = rawVelocity;
+            }
+        }
+        else
+        {
+            targetVelocity = rawVelocity;
+        }
         
         // Calculate target position and rotation
         targetPosition = CalculateTargetPosition();
         
-        // Apply position interpolation
-        transform.position = Vector3.Lerp(transform.position, targetPosition, positionLerpSpeed * deltaTime);
+        // Apply position interpolation with anti-shake
+        float adjustedPositionSpeed = useAntiShake ? positionLerpSpeed * 0.7f : positionLerpSpeed;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, adjustedPositionSpeed * deltaTime);
         
-        // Calculate look at point with target velocity prediction for smoother movement
+        // Calculate look at point with smoothed velocity prediction
         Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight + (targetVelocity * 0.05f);
         targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
         
-        // Apply rotation interpolation
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationLerpSpeed * deltaTime);
+        // Apply rotation interpolation with anti-shake
+        float adjustedRotationSpeed = useAntiShake ? rotationLerpSpeed * 0.8f : rotationLerpSpeed;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, adjustedRotationSpeed * deltaTime);
         
         // Calculate camera velocity
         cameraVelocity = (transform.position - lastCameraPosition) / deltaTime;
@@ -96,8 +127,9 @@ public class SmoothCamera : MonoBehaviour
         // Apply dynamic effects if enabled
         if (useDynamicCamera && targetRigidbody != null)
         {
-            // Use velocity of the rigidbody for more accurate calculations
-            float speed = targetRigidbody.linearVelocity.magnitude;
+            // Use smoothed velocity instead of raw rigidbody velocity for anti-shake
+            Vector3 velocityToUse = useAntiShake ? smoothedVelocity : targetRigidbody.linearVelocity;
+            float speed = velocityToUse.magnitude;
             
             // Apply a progressive braking effect based on speed
             float speedOffset = Mathf.Min(speed * speedEffect, maxSpeedEffect);
@@ -107,8 +139,8 @@ public class SmoothCamera : MonoBehaviour
             float heightOffset = Mathf.Lerp(0, 0.5f, speed / 50f);
             desiredPosition.y += heightOffset;
             
-            // Add a small prediction for smoother movement
-            desiredPosition += targetRigidbody.linearVelocity * 0.05f;
+            // Add a small prediction for smoother movement using smoothed velocity
+            desiredPosition += velocityToUse * 0.05f;
         }
         
         return desiredPosition;
