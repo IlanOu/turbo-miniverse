@@ -15,7 +15,7 @@ MonoBehaviour:
   maxMotorForce: 1500
   brakeForce: 200
   maxSteerAngle: 50
-  maxSpeed: 200
+  maxSpeed: 220
   accelerationCurve: 0.5
   additionalGravity: 20
   driftFactor: 2
