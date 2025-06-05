@@ -274,14 +274,23 @@ namespace Car
             {
                 if (_verticalInput > 0)
                 {
-                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce;
-                    if (_currentSpeed >= config.motorSettings.maxSpeed)
-                        motorTorque = 0;
+                    // Calculer le pourcentage de vitesse par rapport à la vitesse max
+                    float speedRatio = _currentSpeed / config.motorSettings.maxSpeed;
+            
+                    // Réduire progressivement le couple moteur à l'approche de la vitesse max
+                    float speedFactor = Mathf.Clamp01(1 - speedRatio);
+                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce * speedFactor;
                 }
                 else if (_verticalInput < 0)
                 {
-                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce *
-                                  config.motorSettings.reverseMultiplier;
+                    // Calculer le pourcentage de vitesse par rapport à la vitesse max en marche arrière
+                    float reverseSpeed = Mathf.Abs(_currentSpeed);
+                    float reverseSpeedRatio = reverseSpeed / (config.motorSettings.maxSpeed * config.motorSettings.reverseMultiplier);
+            
+                    // Réduire progressivement le couple moteur en marche arrière
+                    float reverseSpeedFactor = Mathf.Clamp01(1 - reverseSpeedRatio);
+                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce * 
+                                  config.motorSettings.reverseMultiplier * reverseSpeedFactor;
                 }
             }
             else
@@ -289,6 +298,7 @@ namespace Car
                 motorTorque *= 0.5f;
             }
 
+            // Appliquer le couple aux roues
             frontLeftWheelCollider.motorTorque = motorTorque;
             frontRightWheelCollider.motorTorque = motorTorque;
             rearLeftWheelCollider.motorTorque = motorTorque;
@@ -297,6 +307,7 @@ namespace Car
             _currentBrakeForce = _isBraking ? config.motorSettings.brakeForce : 0f;
             ApplyBraking();
         }
+
 
         private void ApplyBraking()
         {

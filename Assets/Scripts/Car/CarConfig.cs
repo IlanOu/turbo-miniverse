@@ -105,34 +105,34 @@ public class CarConfig : ScriptableObject
         // Configuration moteur sportive - puissante et réactive
         config.motorSettings.maxMotorForce = 4500f;
         config.motorSettings.brakeForce = 6000f;
-        config.motorSettings.maxSpeed = 280f;
-        config.motorSettings.reverseMultiplier = 0.6f;
-        config.motorSettings.accelerationCurve = 0.8f;
+        config.motorSettings.maxSpeed = 200f;
+        config.motorSettings.reverseMultiplier = 0.75f;
+        config.motorSettings.accelerationCurve = 0.4f;
 
         // Direction précise et réactive
-        config.steeringSettings.maxSteerAngle = 38f;
-        config.steeringSettings.steeringReturnSpeed = 8f;
+        config.steeringSettings.maxSteerAngle = 20f;
+        config.steeringSettings.steeringReturnSpeed = 6f;
 
         // Adhérence sportive - équilibrée mais ferme
-        config.wheelSettings.baseStiffness = 1.4f;
-        config.wheelSettings.frontGripMultiplier = 1.5f;
-        config.wheelSettings.rearGripMultiplier = 1.2f;
+        config.wheelSettings.baseStiffness = 1.3f;
+        config.wheelSettings.frontGripMultiplier = 1.8f;
+        config.wheelSettings.rearGripMultiplier = 2f;
 
         // Suspension ferme pour meilleure tenue de route
-        config.suspensionSettings.springForce = 65000f;
-        config.suspensionSettings.damperForce = 6000f;
-        config.suspensionSettings.suspensionDistance = 0.07f;
+        config.suspensionSettings.springForce = 55000f;
+        config.suspensionSettings.damperForce = 4800f;
+        config.suspensionSettings.suspensionDistance = 0.15f;
 
         // Drift contrôlé mais possible
-        config.driftSettings.driftAngleThreshold = 15f;
-        config.driftSettings.turnGripFactor = 0.65f;
-        config.driftSettings.minSpeedForDrift = 45f;
-        config.driftSettings.driftControlFactor = 0.9f;
+        config.driftSettings.driftAngleThreshold = 12f;
+        config.driftSettings.turnGripFactor = 0.55f;
+        config.driftSettings.minSpeedForDrift = 40f;
+        config.driftSettings.driftControlFactor = 0.85f;
 
         // Rigidbody stable avec bonne tenue de route
-        config.rigidbodySettings.linearDamping = 0.15f;
-        config.rigidbodySettings.angularDamping = 0.6f;
-        config.rigidbodySettings.additionalGravity = 30f;
+        config.rigidbodySettings.linearDamping = 0.2f;
+        config.rigidbodySettings.angularDamping = 0.5f;
+        config.rigidbodySettings.additionalGravity = 22f;
 
         return config;
     }
