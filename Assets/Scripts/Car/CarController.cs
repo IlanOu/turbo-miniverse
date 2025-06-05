@@ -12,82 +12,95 @@ namespace Car
         private float _currentSpeed = 0f;
         private bool _isDrifting = false;
 
-        [Header("Configuration")] 
-        public CarConfig config;
-        
-        [Header("Physics")]
-        [SerializeField] private Transform centerOfMassTransform;
-        
-        [Header("Car Components")]
-        // Wheel Colliders
-        [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
-        [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
+        [Header("Configuration")] public CarConfig config;
 
-        // Wheels
+        [Header("Physics")] [SerializeField] private Transform centerOfMassTransform;
+        [SerializeField] private Vector3 defaultCenterOfMass = new Vector3(0, -0.5f, 0.1f);
+
+        [Header("Car Components")] [SerializeField]
+        private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
+
+        [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
         [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
         [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
-
-        // UI Elements
         [SerializeField] private TextMeshProUGUI speedText;
-        
-        private Rigidbody _carRigidbody;
 
+        [Header("Jump Settings")] [SerializeField]
+        private float jumpForce = 10f;
+
+        [SerializeField] private float jumpCooldown = 2f;
+        [SerializeField] private KeyCode _jumpKey = KeyCode.J;
+
+        [Header("Collision Settings")] [SerializeField]
+        private float collisionDragMultiplier = 3f;
+
+        [SerializeField] private float collisionRecoveryTime = 0.5f;
+        [SerializeField] private float minCollisionSpeed = 5f;
+        [SerializeField] private float velocityReductionFactor = 0.5f;
+
+        private Rigidbody _carRigidbody;
         private bool _hasBattery = true;
-    
+        private bool _canJump = true;
+        private bool _isRecoveringFromCollision;
+        private float _originalDrag;
+        private Vector3 _lastCollisionNormal;
+        private float _collisionRecoveryTimer;
+
         public bool IsDrifting => _isDrifting;
+        public bool CanJump => _canJump;
 
         private void Start()
         {
             _carRigidbody = GetComponent<Rigidbody>();
+            _originalDrag = _carRigidbody.linearDamping;
+            InitializeRigidbody();
+            ConfigureWheelColliders();
+        }
 
+        private void InitializeRigidbody()
+        {
             if (_carRigidbody != null)
             {
-                _carRigidbody.linearDamping = 0.2f;
-                _carRigidbody.angularDamping = 0.5f;
-        
-                // Utiliser la position du Transform si assigné, sinon valeur par défaut
+                _carRigidbody.linearDamping = config.rigidbodySettings.linearDamping;
+                _carRigidbody.angularDamping = config.rigidbodySettings.angularDamping;
+
                 if (centerOfMassTransform != null)
                 {
                     _carRigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMassTransform.position);
                 }
                 else
                 {
-                    _carRigidbody.centerOfMass = new Vector3(0, -0.5f, 0.1f);
+                    _carRigidbody.centerOfMass = defaultCenterOfMass;
                 }
             }
-
-            ConfigureWheelColliders();
         }
-
 
         private void ConfigureWheelColliders()
         {
-            // Configuration pour un style arcade : 
-            // Les roues avant bénéficient d'une adhérence renforcée, et l'arrière est plus permissif pour le drift
-            ConfigureWheelForGrip(frontLeftWheelCollider, config.gripFactor * 1.2f);
-            ConfigureWheelForGrip(frontRightWheelCollider, config.gripFactor * 1.2f);
-            ConfigureWheelForGrip(rearLeftWheelCollider, config.gripFactor * config.driftFactor);
-            ConfigureWheelForGrip(rearRightWheelCollider, config.gripFactor * config.driftFactor);
-        }
-    
-        private void ConfigureWheelForGrip(WheelCollider wheel, float stiffness)
-        {
-            WheelFrictionCurve fwdFriction = wheel.forwardFriction;
-            fwdFriction.stiffness = stiffness * 2.0f;
-            wheel.forwardFriction = fwdFriction;
-        
-            WheelFrictionCurve sideFriction = wheel.sidewaysFriction;
-            sideFriction.stiffness = stiffness;
-            wheel.sidewaysFriction = sideFriction;
-        
-            JointSpring spring = wheel.suspensionSpring;
-            spring.spring = 50000f;
-            spring.damper = 4500f;
-            wheel.suspensionSpring = spring;
-            wheel.suspensionDistance = 0.1f;
+            ConfigureWheelForGrip(frontLeftWheelCollider, config.wheelSettings.frontGripMultiplier);
+            ConfigureWheelForGrip(frontRightWheelCollider, config.wheelSettings.frontGripMultiplier);
+            ConfigureWheelForGrip(rearLeftWheelCollider, config.wheelSettings.rearGripMultiplier);
+            ConfigureWheelForGrip(rearRightWheelCollider, config.wheelSettings.rearGripMultiplier);
         }
 
-        private void FixedUpdate() 
+        private void ConfigureWheelForGrip(WheelCollider wheel, float stiffnessMultiplier)
+        {
+            WheelFrictionCurve fwdFriction = wheel.forwardFriction;
+            fwdFriction.stiffness = config.wheelSettings.baseStiffness * stiffnessMultiplier;
+            wheel.forwardFriction = fwdFriction;
+
+            WheelFrictionCurve sideFriction = wheel.sidewaysFriction;
+            sideFriction.stiffness = config.wheelSettings.baseStiffness * stiffnessMultiplier * 0.5f;
+            wheel.sidewaysFriction = sideFriction;
+
+            JointSpring spring = wheel.suspensionSpring;
+            spring.spring = config.suspensionSettings.springForce;
+            spring.damper = config.suspensionSettings.damperForce;
+            wheel.suspensionSpring = spring;
+            wheel.suspensionDistance = config.suspensionSettings.suspensionDistance;
+        }
+
+        private void FixedUpdate()
         {
             GetInput();
             HandleMotor();
@@ -97,31 +110,127 @@ namespace Car
             UpdateUI();
             CheckDrifting();
             AdjustGripDuringTurning();
+            HandleJump();
+            HandleCollisionRecovery();
         }
-    
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (_carRigidbody.linearVelocity.magnitude > minCollisionSpeed)
+            {
+                HandleCollision(collision);
+            }
+        }
+
+        private void HandleCollision(Collision collision)
+        {
+            _lastCollisionNormal = collision.contacts[0].normal;
+            Vector3 velocityAlongNormal = Vector3.Project(_carRigidbody.linearVelocity, _lastCollisionNormal);
+            _carRigidbody.linearVelocity -= velocityAlongNormal * velocityReductionFactor;
+            _carRigidbody.linearDamping = _originalDrag * collisionDragMultiplier;
+            ReduceWheelForcesAfterCollision();
+            _isRecoveringFromCollision = true;
+            _collisionRecoveryTimer = collisionRecoveryTime;
+        }
+
+        private void HandleCollisionRecovery()
+        {
+            if (_isRecoveringFromCollision)
+            {
+                _collisionRecoveryTimer -= Time.fixedDeltaTime;
+
+                if (_collisionRecoveryTimer <= 0)
+                {
+                    _isRecoveringFromCollision = false;
+                    _carRigidbody.linearDamping = _originalDrag;
+                    ConfigureWheelColliders();
+                }
+            }
+        }
+
+        private void ReduceWheelForcesAfterCollision()
+        {
+            WheelCollider[] wheels =
+            {
+                frontLeftWheelCollider,
+                frontRightWheelCollider,
+                rearLeftWheelCollider,
+                rearRightWheelCollider
+            };
+
+            foreach (WheelCollider wheel in wheels)
+            {
+                wheel.motorTorque = 0;
+
+                WheelFrictionCurve fwdFriction = wheel.forwardFriction;
+                fwdFriction.stiffness *= collisionDragMultiplier;
+                wheel.forwardFriction = fwdFriction;
+
+                WheelFrictionCurve sideFriction = wheel.sidewaysFriction;
+                sideFriction.stiffness *= collisionDragMultiplier;
+                wheel.sidewaysFriction = sideFriction;
+            }
+        }
+
+        private bool IsGrounded()
+        {
+            return frontLeftWheelCollider.isGrounded &&
+                   frontRightWheelCollider.isGrounded &&
+                   rearLeftWheelCollider.isGrounded &&
+                   rearRightWheelCollider.isGrounded;
+        }
+
+        private void HandleJump()
+        {
+            if (_hasBattery && _canJump && Input.GetKey(_jumpKey) && IsGrounded())
+            {
+                _carRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                _canJump = false;
+                StartCoroutine(JumpCooldown());
+            }
+        }
+
+        private IEnumerator JumpCooldown()
+        {
+            yield return new WaitForSeconds(jumpCooldown);
+            _canJump = true;
+        }
+
         private void AdjustGripDuringTurning()
         {
-            if (Mathf.Abs(_horizontalInput) > 0.1f && _currentSpeed > 30f)
+            float turnIntensity = Mathf.Abs(_horizontalInput);
+
+            if (_currentSpeed > 5f)
             {
-                float turnGrip = config.gripFactor * config.driftFactor * config.turnGripFactor;
-                ConfigureWheelForGrip(rearLeftWheelCollider, turnGrip);
-                ConfigureWheelForGrip(rearRightWheelCollider, turnGrip);
+                float baseFactor = 1.0f;
+                float minFactor = config.driftSettings.turnGripFactor;
+                float speedFactor = Mathf.Clamp01(_currentSpeed / config.motorSettings.maxSpeed);
+                float targetFactor = Mathf.Lerp(baseFactor, minFactor, speedFactor * turnIntensity);
+                float frontGrip = config.wheelSettings.frontGripMultiplier * Mathf.Lerp(1.0f, 0.9f, turnIntensity);
+                float rearGrip = config.wheelSettings.rearGripMultiplier * targetFactor;
+
+                ConfigureWheelForGrip(frontLeftWheelCollider, frontGrip);
+                ConfigureWheelForGrip(frontRightWheelCollider, frontGrip);
+                ConfigureWheelForGrip(rearLeftWheelCollider, rearGrip);
+                ConfigureWheelForGrip(rearRightWheelCollider, rearGrip);
             }
             else
             {
-                ConfigureWheelForGrip(rearLeftWheelCollider, config.gripFactor * config.driftFactor);
-                ConfigureWheelForGrip(rearRightWheelCollider, config.gripFactor * config.driftFactor);
+                ConfigureWheelForGrip(frontLeftWheelCollider, config.wheelSettings.frontGripMultiplier);
+                ConfigureWheelForGrip(frontRightWheelCollider, config.wheelSettings.frontGripMultiplier);
+                ConfigureWheelForGrip(rearLeftWheelCollider, config.wheelSettings.rearGripMultiplier);
+                ConfigureWheelForGrip(rearRightWheelCollider, config.wheelSettings.rearGripMultiplier);
             }
         }
 
         private void CheckDrifting()
         {
-            if (_carRigidbody.linearVelocity.magnitude > 5f)
+            if (_carRigidbody.linearVelocity.magnitude > config.driftSettings.minSpeedForDrift * 0.5f)
             {
                 Vector3 forward = transform.forward;
                 Vector3 velocity = _carRigidbody.linearVelocity.normalized;
                 float angle = Vector3.Angle(forward, velocity);
-                _isDrifting = angle > config.driftAngleThreshold && Mathf.Abs(_horizontalInput) > 0.1f;
+                _isDrifting = angle > config.driftSettings.driftAngleThreshold && Mathf.Abs(_horizontalInput) > 0.1f;
             }
             else
             {
@@ -131,10 +240,10 @@ namespace Car
 
         private void ApplyAdditionalGravity()
         {
-            _carRigidbody.AddForce(Vector3.down * (config.additionalGravity * _carRigidbody.mass));
+            _carRigidbody.AddForce(Vector3.down * (config.rigidbodySettings.additionalGravity * _carRigidbody.mass));
         }
 
-        private void GetInput() 
+        private void GetInput()
         {
             if (_hasBattery)
             {
@@ -151,38 +260,45 @@ namespace Car
                 _currentSpeed = 0f;
             }
         }
-    
+
         public bool IsAccelerating()
         {
             return _hasBattery && Mathf.Abs(_verticalInput) > 0.1f;
         }
 
-
-        private void HandleMotor() 
+        private void HandleMotor()
         {
             float motorTorque = 0f;
-        
-            if (_verticalInput > 0)
+
+            if (!_isRecoveringFromCollision)
             {
-                motorTorque = _verticalInput * config.maxMotorForce;
-                if (_currentSpeed >= config.maxSpeed)
-                    motorTorque = 0;
+                if (_verticalInput > 0)
+                {
+                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce;
+                    if (_currentSpeed >= config.motorSettings.maxSpeed)
+                        motorTorque = 0;
+                }
+                else if (_verticalInput < 0)
+                {
+                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce *
+                                  config.motorSettings.reverseMultiplier;
+                }
             }
-            else if (_verticalInput < 0)
+            else
             {
-                motorTorque = _verticalInput * config.maxMotorForce * 0.7f;
+                motorTorque *= 0.5f;
             }
-        
+
             frontLeftWheelCollider.motorTorque = motorTorque;
             frontRightWheelCollider.motorTorque = motorTorque;
             rearLeftWheelCollider.motorTorque = motorTorque;
             rearRightWheelCollider.motorTorque = motorTorque;
-        
-            _currentBrakeForce = _isBraking ? config.brakeForce : 0f;
+
+            _currentBrakeForce = _isBraking ? config.motorSettings.brakeForce : 0f;
             ApplyBraking();
         }
 
-        private void ApplyBraking() 
+        private void ApplyBraking()
         {
             frontLeftWheelCollider.brakeTorque = _currentBrakeForce;
             frontRightWheelCollider.brakeTorque = _currentBrakeForce;
@@ -190,14 +306,14 @@ namespace Car
             rearRightWheelCollider.brakeTorque = _currentBrakeForce;
         }
 
-        private void HandleSteering() 
+        private void HandleSteering()
         {
-            _currentSteerAngle = config.maxSteerAngle * _horizontalInput;
+            _currentSteerAngle = config.steeringSettings.maxSteerAngle * _horizontalInput;
             frontLeftWheelCollider.steerAngle = _currentSteerAngle;
             frontRightWheelCollider.steerAngle = _currentSteerAngle;
         }
 
-        private void UpdateWheels() 
+        private void UpdateWheels()
         {
             UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
             UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
@@ -205,15 +321,15 @@ namespace Car
             UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
         }
 
-        private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform) 
+        private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
         {
             Vector3 pos;
-            Quaternion rot; 
+            Quaternion rot;
             wheelCollider.GetWorldPose(out pos, out rot);
             wheelTransform.position = pos;
             wheelTransform.rotation = rot;
         }
-    
+
         private void UpdateUI()
         {
             if (speedText)
@@ -221,42 +337,40 @@ namespace Car
                 speedText.text = Mathf.Round(_currentSpeed).ToString() + " km/h";
             }
         }
-    
-        public void ApplyBoost(float boostForce, float duration)
+
+        public void UpdateWheelSettings(WheelSettings newSettings)
         {
-            StartCoroutine(BoostCoroutine(boostForce, duration));
-        }
-    
-        private IEnumerator BoostCoroutine(float boostForce, float duration)
-        {
-            float originalForce = config.maxMotorForce;
-            config.maxMotorForce += boostForce;
-            yield return new WaitForSeconds(duration);
-            config.maxMotorForce = originalForce;
-        }
-    
-        public void SetGripFactor(float value)
-        {
-            config.gripFactor = Mathf.Clamp(value, 0.1f, 2.0f);
+            config.wheelSettings = newSettings;
             ConfigureWheelColliders();
         }
-    
-        public void SetDriftFactor(float value)
+
+        public void UpdateSuspensionSettings(SuspensionSettings newSettings)
         {
-            config.driftFactor = Mathf.Clamp(value, 0.2f, 2.0f);
+            config.suspensionSettings = newSettings;
             ConfigureWheelColliders();
         }
-    
-        public void SetDriftAngleThreshold(float value)
+
+        public void UpdateDriftSettings(DriftSettings newSettings)
         {
-            config.driftAngleThreshold = Mathf.Clamp(value, 5f, 50f);
+            config.driftSettings = newSettings;
         }
-    
-        public void SetTurnGripFactor(float value)
+
+        public void UpdateMotorSettings(MotorSettings newSettings)
         {
-            config.turnGripFactor = Mathf.Clamp(value, 0.1f, 1.0f);
+            config.motorSettings = newSettings;
         }
-    
+
+        public void UpdateSteeringSettings(SteeringSettings newSettings)
+        {
+            config.steeringSettings = newSettings;
+        }
+
+        public void UpdateRigidbodySettings(RigidbodySettings newSettings)
+        {
+            config.rigidbodySettings = newSettings;
+            InitializeRigidbody();
+        }
+
         public void StopCar()
         {
             _hasBattery = false;

@@ -12,13 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220bc474f6904119a4ef2470cdc42ee2, type: 3}
   m_Name: Test CarConfig
   m_EditorClassIdentifier: 
-  maxMotorForce: 1500
-  brakeForce: 200
-  maxSteerAngle: 50
-  maxSpeed: 200
-  accelerationCurve: 0.5
-  additionalGravity: 20
-  driftFactor: 2
-  gripFactor: 1.8
-  driftAngleThreshold: 33
-  turnGripFactor: 0.7
+  motorSettings:
+    maxMotorForce: 3000
+    brakeForce: 5000
+    maxSpeed: 200
+    reverseMultiplier: 0.7
+    accelerationCurve: 0.5
+  steeringSettings:
+    maxSteerAngle: 45
+    steeringReturnSpeed: 5
+  wheelSettings:
+    baseStiffness: 2
+    frontGripMultiplier: 2
+    rearGripMultiplier: 2
+  suspensionSettings:
+    springForce: 50000
+    damperForce: 4500
+    suspensionDistance: 0.1
+  driftSettings:
+    driftAngleThreshold: 15
+    turnGripFactor: 0.5
+    minSpeedForDrift: 30
+    driftControlFactor: 0.8
+  rigidbodySettings:
+    linearDamping: 0.2
+    angularDamping: 0.5
+    additionalGravity: 20

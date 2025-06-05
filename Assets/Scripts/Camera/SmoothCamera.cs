@@ -2,147 +2,130 @@ using UnityEngine;
 
 public class SmoothCamera : MonoBehaviour
 {
-    [Header("Target Settings")]
-    [SerializeField] private Transform target;
+    [Header("Target Settings")] [SerializeField]
+    private Transform target;
+
     [SerializeField] private Vector3 offsetPosition = new Vector3(0, 2.5f, -6f);
     [SerializeField] private float lookAtHeight = 1f;
 
-    [Header("Smoothing Settings")]
-    [SerializeField] private float positionLerpSpeed = 15f;
-    [SerializeField] private float rotationLerpSpeed = 15f;
+    [Header("Smoothing Settings")] [SerializeField]
+    private float positionSmoothTime = 0.2f;
+
+    [SerializeField] private float rotationSmoothTime = 0.2f;
     [SerializeField] private bool useFixedUpdate = true;
 
-    [Header("Dynamic Camera Settings")]
-    [SerializeField] private bool useDynamicCamera = true;
-    [SerializeField] private float speedEffect = 0.01f;
+    [Header("Direction Settings")] [SerializeField]
+    private float backwardOffsetMultiplier = 1.5f;
+
+    [SerializeField] private float directionChangeSpeed = 5f;
+    [SerializeField] private float minDistanceToTarget = 4f;
+
+    [Header("Dynamic Camera Settings")] [SerializeField]
+    private bool useDynamicCamera = true;
+
+    [SerializeField] private float speedEffect = 0.1f;
     [SerializeField] private float maxSpeedEffect = 3f;
+    [SerializeField] private float heightSpeedMultiplier = 0.02f;
 
-    [Header("Anti-Shake Settings")]
-    [SerializeField] private bool useAntiShake = true;
-    [SerializeField] private float shakeThreshold = 0.5f;
-    [SerializeField] private float antiShakeStrength = 0.8f;
-    [SerializeField] private float velocitySmoothing = 10f;
-
-    // Privates variables
-    private Vector3 targetPosition;
-    [HideInInspector] public Quaternion targetRotation;
-    private Rigidbody targetRigidbody;
+    private Vector3 smoothVelocity;
     private Vector3 lastTargetPosition;
-    private Vector3 targetVelocity;
-    private Vector3 smoothedVelocity;
-    private Vector3 lastCameraPosition;
-    private Vector3 cameraVelocity;
+    private float currentDirectionBlend;
+    private Vector3 positionVelocity;
+    private Vector3 currentRotationVelocity;
+    private Vector3 targetRotationEuler;
 
     private void Start()
     {
         if (target == null)
         {
-            Debug.LogError("Veuillez assigner une cible à la caméra dans l'inspecteur!");
+            Debug.LogError("No target assigned to camera!");
+            enabled = false;
             return;
         }
 
-        targetRigidbody = target.GetComponent<Rigidbody>();
         lastTargetPosition = target.position;
-        lastCameraPosition = transform.position;
-        smoothedVelocity = Vector3.zero;
-        
-        // Set camera position on target on start
-        transform.position = CalculateTargetPosition();
-        Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight;
-        transform.rotation = Quaternion.LookRotation(lookAtPoint - transform.position);
+        ResetCameraPosition();
+    }
+
+    private void FixedUpdate()
+    {
+        if (useFixedUpdate)
+            UpdateCamera(Time.fixedDeltaTime);
     }
 
     private void Update()
     {
         if (!useFixedUpdate)
-        {
             UpdateCamera(Time.deltaTime);
-        }
     }
-    
-    private void FixedUpdate()
-    {
-        if (useFixedUpdate)
-        {
-            UpdateCamera(Time.fixedDeltaTime);
-        }
-    }
-    
+
     private void UpdateCamera(float deltaTime)
     {
-        if (target == null)
-            return;
-        
-        // Calculate raw target velocity
-        Vector3 rawVelocity = (target.position - lastTargetPosition) / deltaTime;
+        if (target == null) return;
+
+        // Calcul de la vélocité de la cible
+        Vector3 targetVelocity = (target.position - lastTargetPosition) / deltaTime;
         lastTargetPosition = target.position;
-        
-        // Apply anti-shake filtering
-        if (useAntiShake)
+        smoothVelocity = Vector3.Lerp(smoothVelocity, targetVelocity, deltaTime * 5f);
+
+        // Détermination de la direction de mouvement
+        float dotProduct = Vector3.Dot(target.forward, smoothVelocity.normalized);
+        float targetBlend = dotProduct < 0 ? 1 : 0;
+        currentDirectionBlend = Mathf.Lerp(currentDirectionBlend, targetBlend, directionChangeSpeed * deltaTime);
+
+        // Calcul de l'offset de base
+        Vector3 dynamicOffset = offsetPosition;
+        dynamicOffset.z *= (1 + (currentDirectionBlend * (backwardOffsetMultiplier - 1)));
+
+        // Ajout des effets dynamiques
+        if (useDynamicCamera)
         {
-            // Smooth the velocity to reduce jitter
-            smoothedVelocity = Vector3.Lerp(smoothedVelocity, rawVelocity, velocitySmoothing * deltaTime);
-            
-            // Use smoothed velocity if the raw velocity change is too sudden (shake detection)
-            Vector3 velocityDifference = rawVelocity - smoothedVelocity;
-            if (velocityDifference.magnitude > shakeThreshold)
-            {
-                targetVelocity = Vector3.Lerp(rawVelocity, smoothedVelocity, antiShakeStrength);
-            }
-            else
-            {
-                targetVelocity = rawVelocity;
-            }
+            float speed = smoothVelocity.magnitude;
+            float speedOffset = Mathf.Clamp(speed * speedEffect, 0, maxSpeedEffect);
+            dynamicOffset.y += speed * heightSpeedMultiplier;
+            dynamicOffset.z -= speedOffset;
         }
-        else
+
+        // Calcul de la position cible
+        Vector3 targetPosition = target.position + target.TransformDirection(dynamicOffset);
+
+        // Application du smooth damp pour la position
+        transform.position = Vector3.SmoothDamp(
+            transform.position,
+            targetPosition,
+            ref positionVelocity,
+            positionSmoothTime
+        );
+
+        // Vérification de la distance minimale
+        Vector3 directionToTarget = (transform.position - target.position).normalized;
+        float currentDistance = Vector3.Distance(transform.position, target.position);
+        if (currentDistance < minDistanceToTarget)
         {
-            targetVelocity = rawVelocity;
+            transform.position = target.position + directionToTarget * minDistanceToTarget;
         }
-        
-        // Calculate target position and rotation
-        targetPosition = CalculateTargetPosition();
-        
-        // Apply position interpolation with anti-shake
-        float adjustedPositionSpeed = useAntiShake ? positionLerpSpeed * 0.7f : positionLerpSpeed;
-        transform.position = Vector3.Lerp(transform.position, targetPosition, adjustedPositionSpeed * deltaTime);
-        
-        // Calculate look at point with smoothed velocity prediction
-        Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight + (targetVelocity * 0.05f);
-        targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
-        
-        // Apply rotation interpolation with anti-shake
-        float adjustedRotationSpeed = useAntiShake ? rotationLerpSpeed * 0.8f : rotationLerpSpeed;
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, adjustedRotationSpeed * deltaTime);
-        
-        // Calculate camera velocity
-        cameraVelocity = (transform.position - lastCameraPosition) / deltaTime;
-        lastCameraPosition = transform.position;
+
+        // Rotation de la caméra
+        Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight;
+        Quaternion targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            deltaTime / rotationSmoothTime
+        );
     }
-    
-    private Vector3 CalculateTargetPosition()
+
+    public void ResetCameraPosition()
     {
-        // Base position in the local space of the target
-        Vector3 desiredPosition = target.TransformPoint(offsetPosition);
-        
-        // Apply dynamic effects if enabled
-        if (useDynamicCamera && targetRigidbody != null)
-        {
-            // Use smoothed velocity instead of raw rigidbody velocity for anti-shake
-            Vector3 velocityToUse = useAntiShake ? smoothedVelocity : targetRigidbody.linearVelocity;
-            float speed = velocityToUse.magnitude;
-            
-            // Apply a progressive braking effect based on speed
-            float speedOffset = Mathf.Min(speed * speedEffect, maxSpeedEffect);
-            desiredPosition -= target.forward * speedOffset;
-            
-            // Small height offset based on speed
-            float heightOffset = Mathf.Lerp(0, 0.5f, speed / 50f);
-            desiredPosition.y += heightOffset;
-            
-            // Add a small prediction for smoother movement using smoothed velocity
-            desiredPosition += velocityToUse * 0.05f;
-        }
-        
-        return desiredPosition;
+        if (target == null) return;
+
+        transform.position = target.position + target.TransformDirection(offsetPosition);
+        Vector3 lookAtPoint = target.position + Vector3.up * lookAtHeight;
+        transform.rotation = Quaternion.LookRotation(lookAtPoint - transform.position);
+
+        currentDirectionBlend = 0;
+        smoothVelocity = Vector3.zero;
+        positionVelocity = Vector3.zero;
+        currentRotationVelocity = Vector3.zero;
     }
 }

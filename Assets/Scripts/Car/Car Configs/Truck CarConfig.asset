@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 220bc474f6904119a4ef2470cdc42ee2, type: 3}
-  m_Name: Basic CarConfig
+  m_Name: Truck CarConfig
   m_EditorClassIdentifier: 
   motorSettings:
-    maxMotorForce: 5000
-    brakeForce: 5800
-    maxSpeed: 200
-    reverseMultiplier: 0.75
-    accelerationCurve: 0.65
+    maxMotorForce: 4500
+    brakeForce: 5500
+    maxSpeed: 90
+    reverseMultiplier: 0.7
+    accelerationCurve: 0.345
   steeringSettings:
-    maxSteerAngle: 42
-    steeringReturnSpeed: 6
+    maxSteerAngle: 35
+    steeringReturnSpeed: 5
   wheelSettings:
-    baseStiffness: 1.3
-    frontGripMultiplier: 1.4
-    rearGripMultiplier: 1.4
+    baseStiffness: 1.4
+    frontGripMultiplier: 1.18
+    rearGripMultiplier: 1.735
   suspensionSettings:
-    springForce: 55000
-    damperForce: 4800
-    suspensionDistance: 0.15
+    springForce: 35000
+    damperForce: 3500
+    suspensionDistance: 0.18
   driftSettings:
-    driftAngleThreshold: 12
-    turnGripFactor: 0.55
+    driftAngleThreshold: 20
+    turnGripFactor: 0.65
     minSpeedForDrift: 35
-    driftControlFactor: 0.85
+    driftControlFactor: 0.8
   rigidbodySettings:
-    linearDamping: 0.2
+    linearDamping: 0.25
     angularDamping: 0.5
-    additionalGravity: 22
+    additionalGravity: 15
