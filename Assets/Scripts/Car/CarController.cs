@@ -17,7 +17,10 @@ namespace Car
         [Header("Physics")] [SerializeField] private Transform centerOfMassTransform;
         [SerializeField] private Vector3 defaultCenterOfMass = new Vector3(0, -0.5f, 0.1f);
 
-        [Header("Car Components")] [SerializeField]
+        [Header("Car Components")] 
+        [SerializeField] private ElectricCarSound electricCarSound;
+        
+        [SerializeField]
         private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
 
         [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
@@ -108,6 +111,7 @@ namespace Car
             UpdateWheels();
             ApplyAdditionalGravity();
             UpdateUI();
+            HandleAudio();
             CheckDrifting();
             AdjustGripDuringTurning();
             HandleJump();
@@ -121,7 +125,12 @@ namespace Car
                 HandleCollision(collision);
             }
         }
-
+        
+        void HandleAudio()
+        {
+            electricCarSound.SetSpeed(_currentSpeed);
+        }
+        
         private void HandleCollision(Collision collision)
         {
             _lastCollisionNormal = collision.contacts[0].normal;
@@ -276,7 +285,7 @@ namespace Car
                 {
                     // Calculer le pourcentage de vitesse par rapport à la vitesse max
                     float speedRatio = _currentSpeed / config.motorSettings.maxSpeed;
-            
+
                     // Réduire progressivement le couple moteur à l'approche de la vitesse max
                     float speedFactor = Mathf.Clamp01(1 - speedRatio);
                     motorTorque = _verticalInput * config.motorSettings.maxMotorForce * speedFactor;
@@ -285,11 +294,12 @@ namespace Car
                 {
                     // Calculer le pourcentage de vitesse par rapport à la vitesse max en marche arrière
                     float reverseSpeed = Mathf.Abs(_currentSpeed);
-                    float reverseSpeedRatio = reverseSpeed / (config.motorSettings.maxSpeed * config.motorSettings.reverseMultiplier);
-            
+                    float reverseSpeedRatio = reverseSpeed /
+                                              (config.motorSettings.maxSpeed * config.motorSettings.reverseMultiplier);
+
                     // Réduire progressivement le couple moteur en marche arrière
                     float reverseSpeedFactor = Mathf.Clamp01(1 - reverseSpeedRatio);
-                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce * 
+                    motorTorque = _verticalInput * config.motorSettings.maxMotorForce *
                                   config.motorSettings.reverseMultiplier * reverseSpeedFactor;
                 }
             }

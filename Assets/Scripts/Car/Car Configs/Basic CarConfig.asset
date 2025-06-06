@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: Basic CarConfig
   m_EditorClassIdentifier: 
   motorSettings:
-    maxMotorForce: 5000
-    brakeForce: 5800
+    maxMotorForce: 4500
+    brakeForce: 6000
     maxSpeed: 200
     reverseMultiplier: 0.75
-    accelerationCurve: 0.65
+    accelerationCurve: 0.4
   steeringSettings:
-    maxSteerAngle: 42
+    maxSteerAngle: 20
     steeringReturnSpeed: 6
   wheelSettings:
     baseStiffness: 1.3
-    frontGripMultiplier: 1.4
-    rearGripMultiplier: 1.4
+    frontGripMultiplier: 1.8
+    rearGripMultiplier: 2
   suspensionSettings:
     springForce: 55000
     damperForce: 4800
@@ -32,7 +32,7 @@ MonoBehaviour:
   driftSettings:
     driftAngleThreshold: 12
     turnGripFactor: 0.55
-    minSpeedForDrift: 35
+    minSpeedForDrift: 40
     driftControlFactor: 0.85
   rigidbodySettings:
     linearDamping: 0.2
