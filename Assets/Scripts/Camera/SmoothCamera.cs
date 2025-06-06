@@ -3,7 +3,7 @@ using UnityEngine;
 public class SmoothCamera : MonoBehaviour
 {
     [Header("Target Settings")] [SerializeField]
-    private Transform target;
+    public Transform target;
 
     [SerializeField] private Vector3 offsetPosition = new Vector3(0, 2.5f, -6f);
     [SerializeField] private float lookAtHeight = 1f;

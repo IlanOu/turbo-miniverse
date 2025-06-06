@@ -4142,6 +4142,11 @@ WheelCollider:
   m_LayerOverridePriority: 0
   m_Enabled: 1
   m_ProvidesContacts: 0
+--- !u!1 &176206763 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 927360976372738195}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &176569787
 GameObject:
   m_ObjectHideFlags: 0
@@ -8889,6 +8894,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410870659}
+  - component: {fileID: 410870660}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -8914,8 +8920,30 @@ Transform:
   - {fileID: 330585546}
   - {fileID: 1957527071}
   - {fileID: 1886209314156665466}
+  - {fileID: 566015941}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410870660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410870658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b10201c19160f9041a742a863d41ffd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  car1: {fileID: 258011136}
+  car1WindGameObject: {fileID: 1147667811}
+  car2: {fileID: 176206763}
+  car2WindGameObject: {fileID: 1635841630}
+  car3: {fileID: 578705845}
+  car3WindGameObject: {fileID: 578705844}
+  smoothCamera: {fileID: 330585550}
+  dynamicFOVController: {fileID: 330585551}
+  speedParticleController: {fileID: 330585553}
 --- !u!1001 &416833741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11849,6 +11877,124 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1ac1cee989f669e45b456a502a1ab45b, type: 3}
   m_PrefabInstance: {fileID: 562385862}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &566015940
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 410870659}
+    m_Modifications:
+    - target: {fileID: 3200645737377946059, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: batteryText
+      value: 
+      objectReference: {fileID: 292000404}
+    - target: {fileID: 3200645737377946059, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'disableOnEmpty.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3200645737377946059, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'disableOnEmpty.Array.data[1]'
+      value: 
+      objectReference: {fileID: 330585552}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'wheelColliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 566015942}
+    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'wheelColliders.Array.data[1]'
+      value: 
+      objectReference: {fileID: 566015943}
+    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'wheelSmokeParticles.Array.data[0]'
+      value: 
+      objectReference: {fileID: 566015945}
+    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: 'wheelSmokeParticles.Array.data[1]'
+      value: 
+      objectReference: {fileID: 566015944}
+    - target: {fileID: 6441556214654057880, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: speedText
+      value: 
+      objectReference: {fileID: 78215584}
+    - target: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_Name
+      value: MonsterTruck (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+--- !u!4 &566015941 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5079888105523142205, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &566015942 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 8305882366308708195, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &566015943 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 1654955914009050998, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &566015944 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7230547307694622393, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &566015945 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2584988718854371767, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &571435664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12198,6 +12344,16 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3791683268416597889, guid: ad540cb83129bec4c85c7b10eaa9a6d6, type: 3}
   m_PrefabInstance: {fileID: 575028088}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &578705844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6218650980804480866, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &578705845 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 566015940}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &582387304
 GameObject:
@@ -24221,6 +24377,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3791683268416597889, guid: ad540cb83129bec4c85c7b10eaa9a6d6, type: 3}
   m_PrefabInstance: {fileID: 1146039073}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1147667811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2541496962574592885, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+  m_PrefabInstance: {fileID: 1728274218394657823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1161534633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34410,6 +34571,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3791683268416597889, guid: ad540cb83129bec4c85c7b10eaa9a6d6, type: 3}
   m_PrefabInstance: {fileID: 1631713443}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1635841630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6218650980804480866, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+  m_PrefabInstance: {fileID: 927360976372738195}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1637794637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42949,10 +43115,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 292000404}
     - target: {fileID: 3200645737377946059, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: 'disableOnEmpty.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3200645737377946059, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: 'disableOnEmpty.Array.data[1]'
       value: 
       objectReference: {fileID: 330585552}
@@ -42996,22 +43158,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: 'wheelColliders.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: 'wheelColliders.Array.data[1]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: 'wheelSmokeParticles.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6150307979667863883, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: 'wheelSmokeParticles.Array.data[1]'
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6441556214654057880, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: speedText
       value: 
@@ -43019,10 +43165,6 @@ PrefabInstance:
     - target: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: m_Name
       value: MonsterTruck
-      objectReference: {fileID: 0}
-    - target: {fileID: 7041903286516386007, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -3,7 +3,8 @@
 public class DynamicFOVController : MonoBehaviour
 {
     [Header("FOV Settings")]
-    [SerializeField] private Transform target;
+    [SerializeField]
+    public Transform target;
     [SerializeField] private Camera targetCamera;
     [SerializeField] private float speedThreshold = 150f; // En km/h
     [SerializeField] private float defaultFOV = 60f;

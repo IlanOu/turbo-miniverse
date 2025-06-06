@@ -4,8 +4,9 @@ using System.Collections.Generic;
 public class SpeedParticleController : MonoBehaviour
 {
     [Header("Target Settings")]
-    [SerializeField] private Transform target;
-    [SerializeField] private List<ParticleSystem> speedEffects = new List<ParticleSystem>();
+    [SerializeField]
+    public Transform target;
+    [SerializeField] public List<ParticleSystem> speedEffects = new List<ParticleSystem>();
     
     [Header("Speed Settings")]
     [SerializeField] private float activationSpeed = 80f; // Vitesse d'activation en km/h

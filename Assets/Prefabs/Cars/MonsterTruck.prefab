@@ -5355,13 +5355,15 @@ GameObject:
   - component: {fileID: 6441556214654057880}
   - component: {fileID: 3200645737377946059}
   - component: {fileID: 6150307979667863883}
+  - component: {fileID: 7368954927185571848}
+  - component: {fileID: 2109711123673798309}
   m_Layer: 7
   m_Name: MonsterTruck
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5079888105523142205
 Transform:
   m_ObjectHideFlags: 0
@@ -5422,6 +5424,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: deb21d8d876866444ace19f53ce36bad, type: 2}
   centerOfMassTransform: {fileID: 4076320998405258044}
   defaultCenterOfMass: {x: 0, y: -0.5, z: 0.1}
+  electricCarSound: {fileID: 7368954927185571848}
   frontLeftWheelCollider: {fileID: 6560768602038718510}
   frontRightWheelCollider: {fileID: 3623821952155331124}
   rearLeftWheelCollider: {fileID: 1654955914009050998}
@@ -5434,6 +5437,10 @@ MonoBehaviour:
   jumpForce: 10000
   jumpCooldown: 5
   _jumpKey: 32
+  collisionDragMultiplier: 3
+  collisionRecoveryTime: 0.5
+  minCollisionSpeed: 5
+  velocityReductionFactor: 0.5
 --- !u!114 &3200645737377946059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5469,14 +5476,132 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carRigidbody: {fileID: 7172842245697934098}
   wheelSmokeParticles:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2584988718854371767}
+  - {fileID: 7230547307694622393}
   wheelColliders:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8305882366308708195}
+  - {fileID: 1654955914009050998}
   minSpeedToEmit: 5
   maxSpeed: 50
   maxEmissionRate: 15
+--- !u!114 &7368954927185571848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7041903286516386007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d04df21c27234a40af920f279224837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motorSound: {fileID: 2109711123673798309}
+  minPitch: 0.7
+  maxPitch: 1.2
+  maxVolume: 0.4
+  pitchChangeSpeed: 2
+  volumeChangeSpeed: 3
+  maxSpeedKmh: 200
+  pitchMaxAtSpeedKmh: 120
+  pitchCurve: 0.8
+--- !u!82 &2109711123673798309
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7041903286516386007}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4cb32227159abfe41b859c02bca2cb91, type: 3}
+  m_Resource: {fileID: 8300000, guid: 4cb32227159abfe41b859c02bca2cb91, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7331761543861748708
 GameObject:
   m_ObjectHideFlags: 0
