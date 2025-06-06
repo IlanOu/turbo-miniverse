@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 69094495801852066}
   - component: {fileID: 3988679119221772039}
   - component: {fileID: 1206496098838625229}
-  - component: {fileID: 6388743244732270698}
-  m_Layer: 0
+  - component: {fileID: 571950429739683141}
+  m_Layer: 3
   m_Name: lpbns_br_plants_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6388743244732270698
-BoxCollider:
+--- !u!64 &571950429739683141
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,6 +105,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.60622865, y: 0.33457738, z: 0.3861755}
-  m_Center: {x: -0.16309842, y: 0.6512352, z: -0.011116577}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6653138274702552931, guid: bfed45ccc8a0844428f47c2a7b0a96a3, type: 3}

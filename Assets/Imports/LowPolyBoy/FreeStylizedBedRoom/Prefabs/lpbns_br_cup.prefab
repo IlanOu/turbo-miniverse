@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 483888976447980070}
   - component: {fileID: 3537795075610758531}
   - component: {fileID: 1656254466476161353}
-  - component: {fileID: 1847916147515648234}
-  - component: {fileID: 5500952940865507645}
-  m_Layer: 0
+  - component: {fileID: 7336706559612788249}
+  m_Layer: 3
   m_Name: lpbns_br_cup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,29 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1847916147515648234
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007907849325025436}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.22318913, y: 0.10069613, z: 0.17482433}
-  m_Center: {x: -0.024182402, y: 0.050348163, z: -0.00000016763806}
---- !u!136 &5500952940865507645
-CapsuleCollider:
+--- !u!64 &7336706559612788249
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -127,8 +105,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.086540595
-  m_Height: 0.17308119
-  m_Direction: 1
-  m_Center: {x: 0.0008713458, y: 0.075402245, z: -0.00000016203433}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2989859917921719454, guid: ed7ea7273a735b346aade572b21e7599, type: 3}
