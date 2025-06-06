@@ -5,61 +5,27 @@ namespace Car
 {
     public class ChooseCar : MonoBehaviour
     {
-        public GameObject car1;
-        public GameObject car1WindGameObject;
-
-        public GameObject car2;
-        public GameObject car2WindGameObject;
-
-        public GameObject car3;
-        public GameObject car3WindGameObject;
-
-        public SmoothCamera smoothCamera;
-        public DynamicFOVController dynamicFOVController;
-        public SpeedParticleController speedParticleController;
-
+        public List<GameObject> cars = new List<GameObject>();
+        
         public void Start()
         {
             ChangeCar(1);
         }
         
-        public void ChangeCar(int carNumber)
+        public void ChangeCar(int carIndex)
         {
-            if (carNumber == 1)
+            if (carIndex < 0 || carIndex >= cars.Count)
             {
-                smoothCamera.target = car1.transform;
-                dynamicFOVController.target = car1.transform;
-                speedParticleController.target = car1.transform;
-                speedParticleController.speedEffects =
-                    new List<ParticleSystem>(car1WindGameObject.GetComponentsInChildren<ParticleSystem>());
-                car1.SetActive(true);
-                car2.SetActive(false);
-                car3.SetActive(false);
+                Debug.LogError("Index de voiture invalide: " + carIndex);
+                return;
             }
-            else if (carNumber == 2)
+            
+            foreach (GameObject car in cars)
             {
-                smoothCamera.target = car2.transform;
-                dynamicFOVController.target = car2.transform;
-                speedParticleController.target = car2.transform;
-                speedParticleController.speedEffects =
-                    new List<ParticleSystem>(car2WindGameObject.GetComponentsInChildren<ParticleSystem>());
-
-                car1.SetActive(false);
-                car2.SetActive(true);
-                car3.SetActive(false);
+                car.SetActive(false);
             }
-            else if (carNumber == 3)
-            {
-                smoothCamera.target = car3.transform;
-                dynamicFOVController.target = car3.transform;
-                speedParticleController.target = car3.transform;
-                speedParticleController.speedEffects =
-                    new List<ParticleSystem>(car3WindGameObject.GetComponentsInChildren<ParticleSystem>());
-
-                car1.SetActive(false);
-                car2.SetActive(false);
-                car3.SetActive(true);
-            }
+            
+            cars[carIndex].SetActive(true);
         }
     }
 }

@@ -142,36 +142,36 @@ public class CarConfig : ScriptableObject
         CarConfig config = CreateInstance<CarConfig>();
 
         // Moteur puissant mais contrôlable
-        config.motorSettings.maxMotorForce = 4000f;
+        config.motorSettings.maxMotorForce = 2000f;
         config.motorSettings.brakeForce = 5500f;
-        config.motorSettings.maxSpeed = 240f;
+        config.motorSettings.maxSpeed = 180f;
         config.motorSettings.reverseMultiplier = 0.65f;
-        config.motorSettings.accelerationCurve = 0.7f;
+        config.motorSettings.accelerationCurve = 0.2f;
 
         // Direction très réactive pour contrôler les drifts
-        config.steeringSettings.maxSteerAngle = 52f;
-        config.steeringSettings.steeringReturnSpeed = 6.5f;
+        config.steeringSettings.maxSteerAngle = 20f;
+        config.steeringSettings.steeringReturnSpeed = 6f;
 
         // Roues avec forte adhérence avant mais faible adhérence arrière
-        config.wheelSettings.baseStiffness = 0.9f;
-        config.wheelSettings.frontGripMultiplier = 1.6f;
-        config.wheelSettings.rearGripMultiplier = 0.6f;
+        config.wheelSettings.baseStiffness = 1.3f;
+        config.wheelSettings.frontGripMultiplier = 1.8f;
+        config.wheelSettings.rearGripMultiplier = 2f;
 
         // Suspension intermédiaire
-        config.suspensionSettings.springForce = 48000f;
-        config.suspensionSettings.damperForce = 4200f;
-        config.suspensionSettings.suspensionDistance = 0.1f;
+        config.suspensionSettings.springForce = 55000f;
+        config.suspensionSettings.damperForce = 4800f;
+        config.suspensionSettings.suspensionDistance = 0.15f;
 
         // Drift très facile à déclencher et à maintenir
-        config.driftSettings.driftAngleThreshold = 8f;
-        config.driftSettings.turnGripFactor = 0.35f;
-        config.driftSettings.minSpeedForDrift = 20f;
-        config.driftSettings.driftControlFactor = 0.75f;
+        config.driftSettings.driftAngleThreshold = 12f;
+        config.driftSettings.turnGripFactor = 0.55f;
+        config.driftSettings.minSpeedForDrift = 40f;
+        config.driftSettings.driftControlFactor = 0.1f;
 
         // Rigidbody avec moins de stabilité
-        config.rigidbodySettings.linearDamping = 0.1f;
-        config.rigidbodySettings.angularDamping = 0.4f;
-        config.rigidbodySettings.additionalGravity = 20f;
+        config.rigidbodySettings.linearDamping = 0.2f;
+        config.rigidbodySettings.angularDamping = 0.5f;
+        config.rigidbodySettings.additionalGravity = 22f;
 
         return config;
     }
