@@ -5357,13 +5357,14 @@ GameObject:
   - component: {fileID: 6150307979667863883}
   - component: {fileID: 7368954927185571848}
   - component: {fileID: 2109711123673798309}
+  - component: {fileID: 6050930822462176403}
   m_Layer: 7
   m_Name: MonsterTruck
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5079888105523142205
 Transform:
   m_ObjectHideFlags: 0
@@ -5602,6 +5603,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6050930822462176403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7041903286516386007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad6f38a29cd4c0eaa947ef24550ad80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followDistance: 2
+  followHeight: 1.5
+  followSmoothness: 5
+  keySpacing: 0.5
+  orbitSpeed: 50
 --- !u!1 &7331761543861748708
 GameObject:
   m_ObjectHideFlags: 0

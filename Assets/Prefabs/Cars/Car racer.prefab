@@ -10415,6 +10415,7 @@ GameObject:
   - component: {fileID: 4841533345524056928}
   - component: {fileID: 590946199759841821}
   - component: {fileID: 553551630818478769}
+  - component: {fileID: 7583703653988885585}
   m_Layer: 7
   m_Name: Car racer
   m_TagString: Player
@@ -10661,6 +10662,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7583703653988885585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5403891554750802186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad6f38a29cd4c0eaa947ef24550ad80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followDistance: 2
+  followHeight: 1.5
+  followSmoothness: 5
+  keySpacing: 0.5
+  orbitSpeed: 50
 --- !u!1 &6849899723014956905
 GameObject:
   m_ObjectHideFlags: 0

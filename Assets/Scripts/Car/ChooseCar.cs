@@ -9,7 +9,7 @@ namespace Car
         
         public void Start()
         {
-            ChangeCar(1);
+            ChangeCar(0);
         }
         
         public void ChangeCar(int carIndex)

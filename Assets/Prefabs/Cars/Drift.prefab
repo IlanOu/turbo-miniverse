@@ -5248,7 +5248,7 @@ Transform:
   m_GameObject: {fileID: 5658015687387558323}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.515, z: -0.405}
+  m_LocalPosition: {x: 0, y: -0.515, z: 0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5557,6 +5557,7 @@ GameObject:
   - component: {fileID: 3288709115459491670}
   - component: {fileID: 1834775893538090120}
   - component: {fileID: 8315136823728570943}
+  - component: {fileID: 9009845593452228564}
   m_Layer: 7
   m_Name: Drift
   m_TagString: Player
@@ -5622,7 +5623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0e6878c770a664b86a99830355904f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 2e96996de5d3baf47acbc23a6d850dc0, type: 2}
+  config: {fileID: 11400000, guid: 517b91e81dd03054a9e6207680baa79c, type: 2}
   centerOfMassTransform: {fileID: 3996730315419140600}
   defaultCenterOfMass: {x: 0, y: -0.5, z: 0.1}
   electricCarSound: {fileID: 1834775893538090120}
@@ -5803,6 +5804,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &9009845593452228564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6780373087871799481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad6f38a29cd4c0eaa947ef24550ad80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followDistance: 2
+  followHeight: 1.5
+  followSmoothness: 5
+  keySpacing: 0.5
+  orbitSpeed: 50
 --- !u!1 &7135661950751588396
 GameObject:
   m_ObjectHideFlags: 0
