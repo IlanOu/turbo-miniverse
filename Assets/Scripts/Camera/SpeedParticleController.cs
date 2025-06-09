@@ -103,7 +103,7 @@ public class SpeedParticleController : MonoBehaviour
             return;
 
         // Calculer la vitesse en km/h
-        float speedKmh = targetRigidbody.velocity.magnitude * 3.6f;
+        float speedKmh = targetRigidbody.linearVelocity.magnitude * 3.6f;
 
         // Déterminer si les effets doivent être actifs
         bool shouldBeActive = speedKmh >= activationSpeed;

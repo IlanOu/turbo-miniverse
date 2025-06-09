@@ -14,6 +14,7 @@ namespace Props
 
         [Header("Références")]
         [SerializeField] private Transform chestLid;
+        [SerializeField] private ChestRewardManager rewardManager;
         
         [Header("Paramètres de coffre")]
         [SerializeField] private KeyType requiredKeyType = KeyType.Red;
@@ -100,7 +101,15 @@ namespace Props
         
         void GiveReward()
         {
-            Debug.Log($"Coffre {chestName} ouvert ! Récompense obtenue !");
+            if (rewardManager == null)
+            {
+                rewardManager = GetComponent<ChestRewardManager>();
+            }
+            if (rewardManager != null)
+            {
+                rewardManager.OnChestOpened();
+            }
         }
+
     }
 }
