@@ -16,102 +16,151 @@ namespace Menu
         [SerializeField] private Button nextButton;
         [SerializeField] private TextMeshProUGUI carNameText;
         [SerializeField] private TextMeshProUGUI carStatsText;
+        [SerializeField] private Button selectButton;
+        [SerializeField] private TextMeshProUGUI selectButtonText;
+        [SerializeField] private Image carPreviewImage;
         
         [Header("Car Info")]
-        [SerializeField] private List<CarInfo> carsInfo = new List<CarInfo>();
-        
-        [Header("Animation")]
-        [SerializeField] private float rotationSpeed = 30f; // Vitesse de rotation du modèle
-        [SerializeField] private Transform displayPlatform; // Plateforme qui tourne
+        [SerializeField] private List<CarData> carsData = new List<CarData>();
         
         private int currentCarIndex = 0;
+        private int selectedCarIndex = 0;
+        private MoneyManager moneyManager;
         
         [System.Serializable]
-        public class CarInfo
+        public class CarData
         {
             public string carName = "Voiture";
             public string description = "Description de la voiture";
             [Range(1, 10)] public int speed = 5;
             [Range(1, 10)] public int acceleration = 5;
             [Range(1, 10)] public int handling = 5;
-            public Color carColor = Color.white;
+            public Sprite previewImage;
+            public int price = 0;
+            public bool owned = false; // Indique si la voiture est possédée
         }
         
         private void Start()
         {
-            gameObject.SetActive(false);
+            moneyManager = MoneyManager.Instance;
+            
             // Configurer les boutons
             if (previousButton != null)
                 previousButton.onClick.AddListener(PreviousCar);
                 
             if (nextButton != null)
                 nextButton.onClick.AddListener(NextCar);
+                
+            if (selectButton != null)
+                selectButton.onClick.AddListener(SelectOrBuyCar);
+            
+            // La première voiture est possédée par défaut
+            if (carsData.Count > 0)
+                carsData[0].owned = true;
             
             // Initialiser avec la première voiture
-            UpdateUI();
-        }
-        
-        private void Update()
-        {
-            // Faire tourner la plateforme d'affichage
-            if (displayPlatform != null)
-            {
-                displayPlatform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-            }
+            UpdateCarPreview(currentCarIndex);
             
-            // Navigation avec les touches du clavier (optionnel)
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-                PreviousCar();
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-                NextCar();
+            CloseGarage();
         }
         
         public void NextCar()
         {
             currentCarIndex++;
-            if (currentCarIndex >= carSelector.cars.Count)
+            if (currentCarIndex >= carsData.Count)
                 currentCarIndex = 0;
                 
-            carSelector.ChangeCar(currentCarIndex);
-            UpdateUI();
+            UpdateCarPreview(currentCarIndex);
         }
         
         public void PreviousCar()
         {
             currentCarIndex--;
             if (currentCarIndex < 0)
-                currentCarIndex = carSelector.cars.Count - 1;
+                currentCarIndex = carsData.Count - 1;
                 
-            carSelector.ChangeCar(currentCarIndex);
-            UpdateUI();
+            UpdateCarPreview(currentCarIndex);
         }
         
-        public void SelectCar(int index)
+        private void UpdateCarPreview(int index)
         {
-            if (index >= 0 && index < carSelector.cars.Count)
+            if (index >= 0 && index < carsData.Count)
             {
-                currentCarIndex = index;
-                carSelector.ChangeCar(currentCarIndex);
-                UpdateUI();
-            }
-        }
-        
-        private void UpdateUI()
-        {
-            // Mettre à jour le texte avec les informations de la voiture actuelle
-            if (currentCarIndex < carsInfo.Count)
-            {
-                CarInfo info = carsInfo[currentCarIndex];
+                CarData data = carsData[index];
                 
+                // Mettre à jour l'image de prévisualisation
+                if (carPreviewImage != null && data.previewImage != null)
+                {
+                    carPreviewImage.sprite = data.previewImage;
+                }
+                
+                // Mettre à jour les textes
                 if (carNameText != null)
-                    carNameText.text = info.carName;
+                    carNameText.text = data.carName;
                 
                 if (carStatsText != null)
                 {
-                    carStatsText.text = $"<b>Vitesse:</b> {GenerateStars(info.speed)}\n" +
-                                        $"<b>Accélération:</b> {GenerateStars(info.acceleration)}\n" +
-                                        $"<b>Maniabilité:</b> {GenerateStars(info.handling)}\n\n" +
-                                        $"{info.description}";
+                    carStatsText.text = $"<b>Vitesse:</b> {GenerateStars(data.speed)}\n" +
+                                        $"<b>Accélération:</b> {GenerateStars(data.acceleration)}\n" +
+                                        $"<b>Maniabilité:</b> {GenerateStars(data.handling)}\n\n" +
+                                        $"{data.description}";
+                }
+                
+                // Mettre à jour le bouton de sélection/achat
+                if (selectButton != null && selectButtonText != null)
+                {
+                    if (data.owned)
+                    {
+                        bool isSelected = (index == selectedCarIndex);
+                        selectButtonText.text = isSelected ? "Sélectionnée" : "Sélectionner";
+                        selectButton.interactable = !isSelected;
+                    }
+                    else
+                    {
+                        selectButtonText.text = $"Acheter ({data.price})";
+                        selectButton.interactable = moneyManager != null && moneyManager.GetMoney() >= data.price;
+                    }
+                }
+            }
+        }
+        
+        public void SelectOrBuyCar()
+        {
+            if (currentCarIndex < carsData.Count)
+            {
+                CarData data = carsData[currentCarIndex];
+                
+                if (data.owned)
+                {
+                    // Voiture déjà possédée, la sélectionner
+                    selectedCarIndex = currentCarIndex;
+                    UpdateCarPreview(currentCarIndex); // Mettre à jour l'UI
+                    
+                    // Activer la voiture sélectionnée
+                    carSelector.ChangeCar(selectedCarIndex);
+                    
+                    // Fermer l'interface du garage
+                    CloseGarage();
+                    
+                    Debug.Log($"Voiture {data.carName} sélectionnée et activée");
+                }
+                else
+                {
+                    // Tenter d'acheter la voiture
+                    if (moneyManager != null && moneyManager.SpendMoney(data.price))
+                    {
+                        // Achat réussi
+                        data.owned = true;
+                        carsData[currentCarIndex] = data;
+                        UpdateCarPreview(currentCarIndex);
+                        
+                        Debug.Log($"Voiture {data.carName} achetée pour {data.price} pièces");
+                    }
+                    else
+                    {
+                        // Pas assez d'argent
+                        Debug.Log("Pas assez d'argent pour acheter cette voiture");
+                    }
                 }
             }
         }
@@ -122,11 +171,22 @@ namespace Menu
             for (int i = 0; i < 10; i++)
             {
                 if (i < value)
-                    stars += "■"; // Étoile pleine
+                    stars += "■";
                 else
-                    stars += "□"; // Étoile vide
+                    stars += "□";
             }
             return stars;
+        }
+        
+        public void OpenGarage()
+        {
+            gameObject.SetActive(true);
+            UpdateCarPreview(currentCarIndex);
+        }
+        
+        public void CloseGarage()
+        {
+            gameObject.SetActive(false);
         }
     }
 }
