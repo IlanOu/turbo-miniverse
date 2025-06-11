@@ -27,7 +27,9 @@ namespace Menu
         private int currentCarIndex = 0;
         private int selectedCarIndex = 0;
         private MoneyManager moneyManager;
-        private bool isInitialized = false;
+        
+        // Variable pour contrôler si l'UI doit se fermer automatiquement
+        private bool shouldCloseUI = false;
         
         [System.Serializable]
         public class CarData
@@ -42,21 +44,8 @@ namespace Menu
             public bool owned = false;
         }
         
-        private void Awake()
-        {
-            // S'assurer que l'UI est désactivée au démarrage
-            gameObject.SetActive(false);
-        }
-        
         private void Start()
         {
-            Initialize();
-        }
-        
-        private void Initialize()
-        {
-            if (isInitialized) return;
-            
             moneyManager = MoneyManager.Instance;
             
             // Configuration des boutons
@@ -67,7 +56,7 @@ namespace Menu
                 nextButton.onClick.AddListener(NextCar);
                 
             if (actionButton != null)
-                actionButton.onClick.AddListener(HandleActionButtonClick);
+                actionButton.onClick.AddListener(OnActionButtonClick);
             
             // La première voiture est possédée par défaut
             if (carsData.Count > 0)
@@ -76,7 +65,8 @@ namespace Menu
             // Initialiser avec la première voiture
             selectedCarIndex = 0;
             
-            isInitialized = true;
+            // Désactiver l'UI au démarrage
+            gameObject.SetActive(false);
         }
         
         public void NextCar()
@@ -130,43 +120,39 @@ namespace Menu
         {
             if (actionButton == null || actionButtonText == null)
                 return;
-            
+                
             CarData data = carsData[currentCarIndex];
             
-            if (!data.owned)
+            if (data.owned)
             {
-                // Voiture non possédée - afficher le bouton d'achat
-                actionButtonText.text = $"Acheter ({data.price})";
-                actionButton.interactable = moneyManager != null && moneyManager.GetMoney() >= data.price;
-            }
-            else
-            {
-                // Voiture possédée - afficher le bouton de sélection
                 bool isSelected = (currentCarIndex == selectedCarIndex);
                 actionButtonText.text = isSelected ? "Sélectionnée" : "Sélectionner";
                 actionButton.interactable = !isSelected;
             }
+            else
+            {
+                actionButtonText.text = $"Acheter ({data.price})";
+                actionButton.interactable = moneyManager != null && moneyManager.GetMoney() >= data.price;
+            }
         }
         
-        private void HandleActionButtonClick()
+        private void OnActionButtonClick()
         {
-            if (currentCarIndex >= carsData.Count) return;
-            
             CarData data = carsData[currentCarIndex];
             
-            if (!data.owned)
+            if (data.owned)
             {
-                // Tenter d'acheter la voiture
-                BuyCurrentCar();
+                // Voiture déjà possédée, la sélectionner
+                SelectCar();
             }
             else
             {
-                // Sélectionner la voiture
-                SelectCurrentCar();
+                // Tenter d'acheter la voiture
+                BuyCar();
             }
         }
         
-        private void BuyCurrentCar()
+        private void BuyCar()
         {
             CarData data = carsData[currentCarIndex];
             
@@ -184,11 +170,11 @@ namespace Menu
             Debug.Log($"Voiture {data.carName} achetée pour {data.price} pièces");
             
             // Mettre à jour l'interface après l'achat
-            // IMPORTANT: Ne pas fermer l'UI ici
+            // IMPORTANT: Ne pas fermer l'UI après l'achat
             UpdateActionButton();
         }
         
-        private void SelectCurrentCar()
+        private void SelectCar()
         {
             // Mettre à jour l'index de la voiture sélectionnée
             selectedCarIndex = currentCarIndex;
@@ -204,8 +190,9 @@ namespace Menu
             
             Debug.Log($"Voiture {carsData[currentCarIndex].carName} sélectionnée et activée");
             
-            // Fermer l'interface UNIQUEMENT lors de la sélection
-            CloseGarage();
+            // IMPORTANT: Fermer l'UI UNIQUEMENT lors de la sélection
+            shouldCloseUI = true;
+            gameObject.SetActive(false);
         }
         
         private void PositionSelectedCar()
@@ -262,8 +249,8 @@ namespace Menu
         
         public void OpenGarage()
         {
-            // S'assurer que l'initialisation est faite
-            Initialize();
+            // Réinitialiser le flag
+            shouldCloseUI = false;
             
             // Activer l'UI
             gameObject.SetActive(true);
@@ -271,14 +258,13 @@ namespace Menu
             // Afficher la voiture actuellement sélectionnée
             currentCarIndex = selectedCarIndex;
             UpdateCarDisplay();
-            
-            Debug.Log("Garage UI ouverte");
         }
         
+        // Cette méthode est appelée par GarageStation quand le joueur quitte la zone
         public void CloseGarage()
         {
-            gameObject.SetActive(false);
-            Debug.Log("Garage UI fermée");
+            // Ne rien faire ici - nous ne voulons pas que GarageStation ferme l'UI
+            // L'UI se ferme uniquement dans SelectCar() ou quand le joueur quitte la zone
         }
     }
 }

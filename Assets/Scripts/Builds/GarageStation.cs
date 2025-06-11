@@ -7,13 +7,10 @@ namespace Builds
 {
     public class GarageStation: MonoBehaviour
     {
-        [SerializeField] private GameObject garageUIObject;
-        private GarageUI garageUI;
+        [SerializeField] private GarageUI garageUI;
 
         private void Start()
         {
-            // Récupérer le composant GarageUI
-            garageUI = garageUIObject.GetComponent<GarageUI>();
             if (garageUI == null)
             {
                 Debug.LogError("GarageUI component not found on the referenced GameObject");
@@ -35,7 +32,6 @@ namespace Builds
 
         private void OpenGarageUI()
         {
-            // Utiliser la méthode OpenGarage du script GarageUI au lieu de SetActive
             if (garageUI != null)
             {
                 garageUI.OpenGarage();
@@ -44,10 +40,10 @@ namespace Builds
         
         private void CloseGarageUI()
         {
-            // Utiliser la méthode CloseGarage du script GarageUI au lieu de SetActive
             if (garageUI != null)
             {
-                garageUI.CloseGarage();
+                // Fermer directement l'UI quand le joueur quitte la zone
+                garageUI.gameObject.SetActive(false);
             }
         }
     }
