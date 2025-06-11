@@ -7016,27 +7016,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25970439d51c3b548b8e54a180be0c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1886209314156665466}
+  target: {fileID: 963181185}
   offsetPosition: {x: 0, y: 8, z: -12}
-  lookAtHeight: 1
-  positionSmoothTime: 0.2
-  rotationSmoothTime: 0.2
+  lookAtHeight: 0.5
+  positionSmoothTime: 0.15
+  rotationSmoothTime: 0.15
   useFixedUpdate: 1
-  backwardOffsetMultiplier: 1.5
-  directionChangeSpeed: 5
-  minDistanceToTarget: 4
-  useDynamicCamera: 1
-  speedEffect: 0.1
-  maxSpeedEffect: 2
-  heightSpeedMultiplier: 0.02
+  minDistanceToTarget: 10
+  maxDistanceToTarget: 20
+  teleportIfTooFar: 1
+  backwardOffsetMultiplier: 1.2
+  directionChangeSpeed: 3
+  directionThreshold: 0.3
+  speedTiltFactor: 0.01
+  maxTiltAngle: 3
+  corneringTiltFactor: 0.5
+  maxCorneringTilt: 5
+  speedFOVFactor: 0.008
+  maxAdditionalFOV: 10
   avoidObstacles: 1
   obstacleLayers:
     serializedVersion: 2
-    m_Bits: 8
-  obstacleDetectionDistance: 10
-  obstacleAvoidanceHeight: 2
-  recoverySpeed: 2
-  collisionOffset: 0.5
+    m_Bits: 1
+  obstacleDetectionDistance: 5
+  recoverySpeed: 3
+  collisionOffset: 0.2
+  heightAdjustmentFactor: 0.5
 --- !u!114 &263473411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8438,25 +8443,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1957527071}
   offsetPosition: {x: 0, y: 8, z: -12}
-  lookAtHeight: 1
-  positionSmoothTime: 0.2
-  rotationSmoothTime: 0.2
+  lookAtHeight: 0.5
+  positionSmoothTime: 0.15
+  rotationSmoothTime: 0.15
   useFixedUpdate: 1
-  backwardOffsetMultiplier: 1.5
-  directionChangeSpeed: 5
-  minDistanceToTarget: 4
-  useDynamicCamera: 1
-  speedEffect: 0.1
-  maxSpeedEffect: 2
-  heightSpeedMultiplier: 0.02
+  minDistanceToTarget: 10
+  maxDistanceToTarget: 20
+  teleportIfTooFar: 1
+  backwardOffsetMultiplier: 1.2
+  directionChangeSpeed: 3
+  directionThreshold: 0.3
+  speedTiltFactor: 0.01
+  maxTiltAngle: 3
+  corneringTiltFactor: 0.5
+  maxCorneringTilt: 5
+  speedFOVFactor: 0.008
+  maxAdditionalFOV: 10
   avoidObstacles: 1
   obstacleLayers:
     serializedVersion: 2
-    m_Bits: 8
-  obstacleDetectionDistance: 10
-  obstacleAvoidanceHeight: 2
-  recoverySpeed: 2
-  collisionOffset: 0.5
+    m_Bits: 1
+  obstacleDetectionDistance: 5
+  recoverySpeed: 3
+  collisionOffset: 0.2
+  heightAdjustmentFactor: 0.5
 --- !u!114 &330585551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25609,25 +25619,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1886209313380828213}
   offsetPosition: {x: 0, y: 8, z: -12}
-  lookAtHeight: 1
-  positionSmoothTime: 0.2
-  rotationSmoothTime: 0.2
+  lookAtHeight: 0.5
+  positionSmoothTime: 0.15
+  rotationSmoothTime: 0.15
   useFixedUpdate: 1
-  backwardOffsetMultiplier: 1.5
-  directionChangeSpeed: 5
-  minDistanceToTarget: 4
-  useDynamicCamera: 1
-  speedEffect: 0.1
-  maxSpeedEffect: 2
-  heightSpeedMultiplier: 0.02
+  minDistanceToTarget: 10
+  maxDistanceToTarget: 20
+  teleportIfTooFar: 1
+  backwardOffsetMultiplier: 1.2
+  directionChangeSpeed: 3
+  directionThreshold: 0.3
+  speedTiltFactor: 0.01
+  maxTiltAngle: 3
+  corneringTiltFactor: 0.5
+  maxCorneringTilt: 5
+  speedFOVFactor: 0.008
+  maxAdditionalFOV: 10
   avoidObstacles: 1
   obstacleLayers:
     serializedVersion: 2
-    m_Bits: 8
-  obstacleDetectionDistance: 10
-  obstacleAvoidanceHeight: 2
-  recoverySpeed: 2
-  collisionOffset: 0.5
+    m_Bits: 1
+  obstacleDetectionDistance: 5
+  recoverySpeed: 3
+  collisionOffset: 0.2
+  heightAdjustmentFactor: 0.5
 --- !u!114 &1033311740
 MonoBehaviour:
   m_ObjectHideFlags: 0
