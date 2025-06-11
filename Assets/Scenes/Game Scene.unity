@@ -11865,6 +11865,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3791683268416597889, guid: ad540cb83129bec4c85c7b10eaa9a6d6, type: 3}
   m_PrefabInstance: {fileID: 494452472}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &494713465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 494713466}
+  m_Layer: 0
+  m_Name: Spawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &494713466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494713465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.57, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1855535091}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &498082305
 GameObject:
   m_ObjectHideFlags: 0
@@ -42868,6 +42899,7 @@ Transform:
   m_Children:
   - {fileID: 1320485860}
   - {fileID: 851499621}
+  - {fileID: 494713466}
   m_Father: {fileID: 889548677}
   m_LocalEulerAnglesHint: {x: 0, y: 141.63, z: 0}
 --- !u!65 &1855535092
@@ -42903,7 +42935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aabfe367e95c4e39992e5d57204fab77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  garageUI: {fileID: 5234071096726719848}
+  garageUIObject: {fileID: 5234071096726719848}
 --- !u!1001 &1860271568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49288,12 +49320,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carSelector: {fileID: 410870660}
+  carSpawnPoint: {fileID: 494713466}
   previousButton: {fileID: 226310110}
   nextButton: {fileID: 1905287937}
   carNameText: {fileID: 463353766}
   carStatsText: {fileID: 655253784}
-  selectButton: {fileID: 999114701}
-  selectButtonText: {fileID: 1398864145}
+  actionButton: {fileID: 999114701}
+  actionButtonText: {fileID: 1398864145}
   carPreviewImage: {fileID: 1556800211}
   carsData:
   - carName: Drift Car
@@ -49303,7 +49336,7 @@ MonoBehaviour:
     handling: 7
     previewImage: {fileID: 21300000, guid: 8525ca21508b4ae4ca1c8d34446c4016, type: 3}
     price: 0
-    owned: 0
+    owned: 1
   - carName: Monster Truck
     description: Wahou ! On peut sauter !
     speed: 2

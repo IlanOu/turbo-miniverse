@@ -1,12 +1,24 @@
 using System;
 using Car;
+using Menu;
 using UnityEngine;
 
 namespace Builds
 {
     public class GarageStation: MonoBehaviour
     {
-        [SerializeField] private GameObject garageUI;
+        [SerializeField] private GameObject garageUIObject;
+        private GarageUI garageUI;
+
+        private void Start()
+        {
+            // Récupérer le composant GarageUI
+            garageUI = garageUIObject.GetComponent<GarageUI>();
+            if (garageUI == null)
+            {
+                Debug.LogError("GarageUI component not found on the referenced GameObject");
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -23,12 +35,20 @@ namespace Builds
 
         private void OpenGarageUI()
         {
-            garageUI.SetActive(true);
+            // Utiliser la méthode OpenGarage du script GarageUI au lieu de SetActive
+            if (garageUI != null)
+            {
+                garageUI.OpenGarage();
+            }
         }
         
         private void CloseGarageUI()
         {
-            garageUI.SetActive(false);
+            // Utiliser la méthode CloseGarage du script GarageUI au lieu de SetActive
+            if (garageUI != null)
+            {
+                garageUI.CloseGarage();
+            }
         }
     }
 }
