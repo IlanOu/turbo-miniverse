@@ -278,4 +278,5 @@ public class SmoothCamera : MonoBehaviour
             cam.fieldOfView = baseFOV;
         }
     }
+
 }
