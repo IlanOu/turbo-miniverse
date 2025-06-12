@@ -19072,6 +19072,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 793813162}
+  - component: {fileID: 793813163}
   m_Layer: 0
   m_Name: Drift
   m_TagString: Player
@@ -19096,6 +19097,20 @@ Transform:
   - {fileID: 1886209313380828213}
   m_Father: {fileID: 410870659}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &793813163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793813161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cff537d1b04a828adff8a5bfb61e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  garageSpawnPoint: {fileID: 494713466}
+  teleportKey: 116
 --- !u!1001 &794357668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23448,6 +23463,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 963181185}
+  - component: {fileID: 963181186}
   m_Layer: 0
   m_Name: MonsterTruck
   m_TagString: Player
@@ -23472,6 +23488,20 @@ Transform:
   - {fileID: 1886209314156665466}
   m_Father: {fileID: 410870659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963181186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963181184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cff537d1b04a828adff8a5bfb61e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  garageSpawnPoint: {fileID: 494713466}
+  teleportKey: 116
 --- !u!1001 &963202316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31772,6 +31802,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1353936444}
+  - component: {fileID: 1353936445}
   m_Layer: 0
   m_Name: Speedster
   m_TagString: Player
@@ -31796,6 +31827,20 @@ Transform:
   - {fileID: 1957527071}
   m_Father: {fileID: 410870659}
   m_LocalEulerAnglesHint: {x: 0, y: -99.382, z: 0}
+--- !u!114 &1353936445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353936443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cff537d1b04a828adff8a5bfb61e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  garageSpawnPoint: {fileID: 494713466}
+  teleportKey: 116
 --- !u!1001 &1355588544
 PrefabInstance:
   m_ObjectHideFlags: 0
