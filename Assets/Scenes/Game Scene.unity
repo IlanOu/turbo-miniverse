@@ -7016,15 +7016,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25970439d51c3b548b8e54a180be0c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 963181185}
+  target: {fileID: 1886209314156665466}
   offsetPosition: {x: 0, y: 8, z: -12}
   lookAtHeight: 0.5
   positionSmoothTime: 0.15
   rotationSmoothTime: 0.15
   useFixedUpdate: 1
   minDistanceToTarget: 10
-  maxDistanceToTarget: 20
-  teleportIfTooFar: 1
   backwardOffsetMultiplier: 1.2
   directionChangeSpeed: 3
   directionThreshold: 0.3
@@ -8448,8 +8446,6 @@ MonoBehaviour:
   rotationSmoothTime: 0.15
   useFixedUpdate: 1
   minDistanceToTarget: 10
-  maxDistanceToTarget: 20
-  teleportIfTooFar: 1
   backwardOffsetMultiplier: 1.2
   directionChangeSpeed: 3
   directionThreshold: 0.3
@@ -25624,8 +25620,6 @@ MonoBehaviour:
   rotationSmoothTime: 0.15
   useFixedUpdate: 1
   minDistanceToTarget: 10
-  maxDistanceToTarget: 20
-  teleportIfTooFar: 1
   backwardOffsetMultiplier: 1.2
   directionChangeSpeed: 3
   directionThreshold: 0.3

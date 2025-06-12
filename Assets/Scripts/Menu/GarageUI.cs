@@ -204,36 +204,16 @@ namespace Menu
             GameObject selectedCar = carSelector.cars[selectedCarIndex];
             if (selectedCar == null)
                 return;
-                
+            
+            selectedCar.transform.position = carSpawnPoint.position;
+            selectedCar.transform.rotation = carSpawnPoint.rotation;
+            
             // Positionner tous les enfants au même endroit que le spawnpoint
             for (int i = 0; i < selectedCar.transform.childCount; i++)
             {
                 Transform child = selectedCar.transform.GetChild(i);
-                child.position = carSpawnPoint.position;
-                child.rotation = carSpawnPoint.rotation;
-            }
-            
-            // Réactiver les composants de gameplay
-            EnableGameplayComponents(selectedCar);
-        }
-        
-        private void DisableGameplayComponents(GameObject car)
-        {
-            Rigidbody rb = car.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = true;
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-        }
-        
-        private void EnableGameplayComponents(GameObject car)
-        {
-            Rigidbody rb = car.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = false;
+                child.localPosition = Vector3.zero;
+                child.localRotation = Quaternion.identity;
             }
         }
         

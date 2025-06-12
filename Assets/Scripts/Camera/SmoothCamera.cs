@@ -12,7 +12,6 @@ public class SmoothCamera : MonoBehaviour
     [SerializeField] private float rotationSmoothTime = 0.15f;
     [SerializeField] private bool useFixedUpdate = true;
     [SerializeField] private float minDistanceToTarget = 3f;
-    [SerializeField] private float maxAllowedDistance = 15f; // Distance max avant réinitialisation
 
     [Header("Direction Settings")]
     [SerializeField] private float backwardOffsetMultiplier = 1.2f;
@@ -77,23 +76,6 @@ public class SmoothCamera : MonoBehaviour
     {
         if (!useFixedUpdate)
             UpdateCamera(Time.deltaTime);
-    }
-
-    private void LateUpdate()
-    {
-        // Vérifier si la cible a été téléportée en comparant sa position locale
-        if (target != null && Vector3.Distance(lastLocalTargetPosition, target.localPosition) > 1f)
-        {
-            // La position locale a changé significativement, probablement une téléportation
-            ResetCameraPosition();
-            lastLocalTargetPosition = target.localPosition;
-        }
-        
-        // Vérifier si la caméra est trop loin de la cible
-        if (target != null && Vector3.Distance(transform.position, target.position) > maxAllowedDistance)
-        {
-            ResetCameraPosition();
-        }
     }
 
     private void UpdateCamera(float deltaTime)
