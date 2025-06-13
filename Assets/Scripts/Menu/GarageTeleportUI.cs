@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Car;
+using UnityEngine;
 
 public class TeleportToGarage : MonoBehaviour
 {
@@ -6,12 +7,12 @@ public class TeleportToGarage : MonoBehaviour
     [Tooltip("Point de spawn dans le garage")] public Transform garageSpawnPoint;
     [Tooltip("Touche pour téléporter")] public KeyCode teleportKey = KeyCode.T;
 
-    private Rigidbody rb;
     private SmoothCamera cam;
+    private CarController car;
 
     void Awake()
     {
-        rb = GetComponentInChildren<Rigidbody>();
+        car = GetComponentInChildren<CarController>();
         cam = GetComponentInChildren<SmoothCamera>();
         if (garageSpawnPoint == null)
             Debug.LogError("GarageSpawnPoint non assigné dans TeleportToGarage", this);
@@ -26,10 +27,8 @@ public class TeleportToGarage : MonoBehaviour
     public void Teleport()
     {
         if (garageSpawnPoint == null) return;
-
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
         
+        car.CompletelyStopCar();
         cam.ResetCameraPosition();
         
         transform.position = garageSpawnPoint.position;

@@ -17,11 +17,10 @@ namespace Car
         [Header("Physics")] [SerializeField] private Transform centerOfMassTransform;
         [SerializeField] private Vector3 defaultCenterOfMass = new Vector3(0, -0.5f, 0.1f);
 
-        [Header("Car Components")] 
-        [SerializeField] private ElectricCarSound electricCarSound;
-        
-        [SerializeField]
-        private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
+        [Header("Car Components")] [SerializeField]
+        private ElectricCarSound electricCarSound;
+
+        [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
 
         [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
         [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
@@ -42,12 +41,12 @@ namespace Car
         [SerializeField] private float velocityReductionFactor = 0.5f;
 
         private Rigidbody _carRigidbody;
-        private bool _hasBattery = true;
         private bool _canJump = true;
         private bool _isRecoveringFromCollision;
         private float _originalDrag;
         private Vector3 _lastCollisionNormal;
         private float _collisionRecoveryTimer;
+        private bool _isStoppingCar = false;
 
         public bool IsDrifting => _isDrifting;
         public bool CanJump => _canJump;
@@ -125,12 +124,12 @@ namespace Car
                 HandleCollision(collision);
             }
         }
-        
+
         void HandleAudio()
         {
             electricCarSound.SetSpeed(_currentSpeed);
         }
-        
+
         private void HandleCollision(Collision collision)
         {
             _lastCollisionNormal = collision.contacts[0].normal;
@@ -191,7 +190,7 @@ namespace Car
 
         private void HandleJump()
         {
-            if (_hasBattery && _canJump && Input.GetKey(_jumpKey) && IsGrounded())
+            if (_canJump && Input.GetKey(_jumpKey) && IsGrounded())
             {
                 _carRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 _canJump = false;
@@ -254,30 +253,36 @@ namespace Car
 
         private void GetInput()
         {
-            if (_hasBattery)
-            {
-                _horizontalInput = Input.GetAxis("Horizontal");
-                _verticalInput = Input.GetAxis("Vertical");
-                _isBraking = Input.GetKey(KeyCode.Space);
-                _currentSpeed = _carRigidbody.linearVelocity.magnitude * 3.6f;
-            }
-            else
+            if (_isStoppingCar)
             {
                 _horizontalInput = 0f;
                 _verticalInput = 0f;
-                _isBraking = false;
-                _currentSpeed = 0f;
+                _isBraking = true;
+                return;
             }
+
+            _horizontalInput = Input.GetAxis("Horizontal");
+            _verticalInput = Input.GetAxis("Vertical");
+            _isBraking = Input.GetKey(KeyCode.Space);
+            _currentSpeed = _carRigidbody.linearVelocity.magnitude * 3.6f;
         }
 
         public bool IsAccelerating()
         {
-            return _hasBattery && Mathf.Abs(_verticalInput) > 0.1f;
+            return Mathf.Abs(_verticalInput) > 0.1f;
         }
 
         private void HandleMotor()
         {
             float motorTorque = 0f;
+
+            if (_isStoppingCar)
+            {
+                // Maintenir les freins appliqués pendant l'arrêt
+                _currentBrakeForce = config.motorSettings.brakeForce;
+                ApplyBraking();
+                return;
+            }
 
             if (!_isRecoveringFromCollision)
             {
@@ -317,7 +322,6 @@ namespace Car
             _currentBrakeForce = _isBraking ? config.motorSettings.brakeForce : 0f;
             ApplyBraking();
         }
-
 
         private void ApplyBraking()
         {
@@ -394,12 +398,64 @@ namespace Car
 
         public void StopCar()
         {
-            _hasBattery = false;
+            // Cette fonction est maintenue pour la compatibilité
+            CompletelyStopCar();
         }
 
         public void StartCar()
         {
-            _hasBattery = true;
+            // Cette fonction est maintenue pour la compatibilité
+            _isStoppingCar = false;
+        }
+
+        public void CompletelyStopCar()
+        {
+            _isStoppingCar = true;
+
+            // Arrêter le mouvement du rigidbody
+            _carRigidbody.linearVelocity = Vector3.zero;
+            _carRigidbody.angularVelocity = Vector3.zero;
+
+            // Réinitialiser le couple moteur
+            frontLeftWheelCollider.motorTorque = 0f;
+            frontRightWheelCollider.motorTorque = 0f;
+            rearLeftWheelCollider.motorTorque = 0f;
+            rearRightWheelCollider.motorTorque = 0f;
+
+            // Appliquer les freins pour s'assurer que la voiture s'arrête
+            frontLeftWheelCollider.brakeTorque = config.motorSettings.brakeForce * 2;
+            frontRightWheelCollider.brakeTorque = config.motorSettings.brakeForce * 2;
+            rearLeftWheelCollider.brakeTorque = config.motorSettings.brakeForce * 2;
+            rearRightWheelCollider.brakeTorque = config.motorSettings.brakeForce * 2;
+
+            // Réinitialiser la vitesse actuelle
+            _currentSpeed = 0f;
+
+            // Mettre à jour l'interface utilisateur
+            UpdateUI();
+
+            // Arrêter le son du moteur
+            if (electricCarSound != null)
+            {
+                electricCarSound.SetSpeed(0f);
+            }
+
+            // Relâcher les freins et permettre à nouveau le contrôle après un court délai
+            StartCoroutine(EnableCarAfterDelay(0.5f));
+        }
+
+        private IEnumerator EnableCarAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            // Relâcher les freins
+            frontLeftWheelCollider.brakeTorque = 0f;
+            frontRightWheelCollider.brakeTorque = 0f;
+            rearLeftWheelCollider.brakeTorque = 0f;
+            rearRightWheelCollider.brakeTorque = 0f;
+
+            // Permettre à nouveau le contrôle de la voiture
+            _isStoppingCar = false;
         }
     }
 }

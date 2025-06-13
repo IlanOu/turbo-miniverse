@@ -106,9 +106,9 @@
                 
                 if (carStatsText != null)
                 {
-                    carStatsText.text = $"<b>Vitesse:</b> {GenerateStars(data.speed)}\n" +
-                                        $"<b>Accélération:</b> {GenerateStars(data.acceleration)}\n" +
-                                        $"<b>Maniabilité:</b> {GenerateStars(data.handling)}\n\n" +
+                    carStatsText.text = $"<b>Vitesse:</b>\n {GenerateStars(data.speed)}\n" +
+                                        $"<b>Accélération:</b>\n {GenerateStars(data.acceleration)}\n" +
+                                        $"<b>Maniabilité:</b>\n {GenerateStars(data.handling)}\n\n" +
                                         $"{data.description}";
                 }
                 
