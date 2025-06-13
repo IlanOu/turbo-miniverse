@@ -33642,10 +33642,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: lpbns_br_rug
       objectReference: {fileID: 0}
-    - target: {fileID: 8081789677462341617, guid: 287add0df3acd8b448bcb41b41d86af4, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8891117528126823755, guid: 287add0df3acd8b448bcb41b41d86af4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.75
@@ -49184,6 +49180,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6441556214654057880, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
+      propertyPath: _jumpKey
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441556214654057880, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: speedText
       value: 
       objectReference: {fileID: 78215584}
@@ -49331,6 +49331,14 @@ PrefabInstance:
     - target: {fileID: 2541496962574592885, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2625830256975029979, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: _jumpKey
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 2625830256975029979, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
+      propertyPath: jumpForce
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2625830256975029979, guid: 9a7d1c93e7257ef4ea4620169c273f80, type: 3}
       propertyPath: speedText
@@ -49715,6 +49723,10 @@ PrefabInstance:
     - target: {fileID: 1208951361517293469, guid: b32a901d212c1254c9a54e6c910167a9, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2442983076535833172, guid: b32a901d212c1254c9a54e6c910167a9, type: 3}
+      propertyPath: _jumpKey
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 2442983076535833172, guid: b32a901d212c1254c9a54e6c910167a9, type: 3}
       propertyPath: speedText

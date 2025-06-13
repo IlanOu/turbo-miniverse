@@ -263,7 +263,7 @@ namespace Car
 
             _horizontalInput = Input.GetAxis("Horizontal");
             _verticalInput = Input.GetAxis("Vertical");
-            _isBraking = Input.GetKey(KeyCode.Space);
+            _isBraking = Input.GetKey(KeyCode.LeftShift);
             _currentSpeed = _carRigidbody.linearVelocity.magnitude * 3.6f;
         }
 
