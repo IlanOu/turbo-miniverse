@@ -51,7 +51,7 @@ MonoBehaviour:
   rotationSpeed: 90
   coinValue: 10
   collectSound: {fileID: 0}
-  collectDuration: 0.4
+  collectDuration: 0.25
   collectHeight: 2
 --- !u!65 &2319178768961064746
 BoxCollider:
@@ -72,7 +72,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6524321, y: 1.703018, z: 0.7579483}
+  m_Size: {x: 1.6524321, y: 1.703018, z: 1.6666241}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3460135514549929628
 PrefabInstance:
