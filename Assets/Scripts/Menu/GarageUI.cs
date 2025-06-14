@@ -275,13 +275,20 @@ namespace Menu
                 bool isSelected = (currentCarIndex == selectedCarIndex);
                 actionButtonText.text = isSelected ? "Sélectionnée" : "Sélectionner";
                 actionButton.interactable = !isSelected;
+
+                // S'assurer que la rotation du bouton est correcte
+                actionButton.transform.rotation = Quaternion.identity;
             }
             else
             {
                 actionButtonText.text = $"Acheter ({data.price})";
                 actionButton.interactable = moneyManager != null && moneyManager.GetMoney() >= data.price;
+
+                // S'assurer que la rotation du bouton est correcte
+                actionButton.transform.rotation = Quaternion.identity;
             }
         }
+
 
         private void OnActionButtonClick()
         {
@@ -596,6 +603,13 @@ namespace Menu
             carAppearSequence.Append(selectedCar.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack));
             carAppearSequence.Join(selectedCar.transform.DORotate(new Vector3(0, 15f, 0), 0.2f, RotateMode.LocalAxisAdd)
                 .SetEase(Ease.OutQuad));
+
+            // S'assurer que la rotation finale est correcte
+            carAppearSequence.OnComplete(() =>
+            {
+                // Réinitialiser la rotation Y à 0 ou à la rotation du spawnPoint
+                selectedCar.transform.rotation = carSpawnPoint.rotation;
+            });
 
             // Initialiser la caméra pour la nouvelle voiture
             Camera mainCamera = Camera.main;
