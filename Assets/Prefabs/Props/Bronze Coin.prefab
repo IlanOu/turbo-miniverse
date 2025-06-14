@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4651815778949906258}
   - component: {fileID: 2319178768961064746}
   m_Layer: 0
-  m_Name: Gold Coin
+  m_Name: Bronze Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6564861480628049962}
+  - {fileID: 6319574500722067792}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4651815778949906258
@@ -49,7 +49,7 @@ MonoBehaviour:
   amplitude: 0.5
   frequency: 1
   rotationSpeed: 90
-  coinValue: 20
+  coinValue: 5
   collectSound: {fileID: 0}
   collectDuration: 0.4
   collectHeight: 2
@@ -74,7 +74,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6524321, y: 1.703018, z: 0.7579483}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1001 &6670301370522255297
+--- !u!1001 &5780681265830866619
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -82,73 +82,73 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3493978498974766941}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalScale.y
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.642
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.667
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.254
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
+    - target: {fileID: 919132149155446097, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
       propertyPath: m_Name
-      value: item-coin-gold
+      value: item-coin-bronze
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
---- !u!4 &6564861480628049962 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
+--- !u!4 &6319574500722067792 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6311fc0836989014f97eb85410b532b8, type: 3}
-  m_PrefabInstance: {fileID: 6670301370522255297}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e97cf035c54c1a543a71042b0f67f4fe, type: 3}
+  m_PrefabInstance: {fileID: 5780681265830866619}
   m_PrefabAsset: {fileID: 0}
