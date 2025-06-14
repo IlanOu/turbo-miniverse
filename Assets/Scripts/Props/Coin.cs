@@ -55,9 +55,14 @@ namespace Props
                 // Ajouter la valeur immédiatement
                 MoneyManager.Instance.AddMoney(coinValue);
                 
-                // Animation style Mario Kart
-                transform.DOLocalMoveY(transform.position.y + collectHeight, collectDuration)
-                    .SetEase(Ease.OutQuad);
+                // Sauvegarder la position actuelle
+                Vector3 currentPosition = transform.position;
+                
+                // Animation style Mario Kart - utiliser DOMove au lieu de DOLocalMoveY
+                transform.DOMove(
+                    new Vector3(currentPosition.x, currentPosition.y + collectHeight, currentPosition.z), 
+                    collectDuration
+                ).SetEase(Ease.OutQuad);
                 
                 transform.DOScale(Vector3.zero, collectDuration)
                     .SetEase(Ease.InQuad)
