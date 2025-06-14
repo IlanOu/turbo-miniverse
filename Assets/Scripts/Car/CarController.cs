@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Car
 {
@@ -51,6 +52,8 @@ namespace Car
         public bool IsDrifting => _isDrifting;
         public bool CanJump => _canJump;
 
+        public UnityEvent onJump;
+        
         private void Start()
         {
             _carRigidbody = GetComponent<Rigidbody>();
@@ -193,6 +196,7 @@ namespace Car
             if (_canJump && Input.GetKey(_jumpKey) && IsGrounded())
             {
                 _carRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                onJump.Invoke();
                 _canJump = false;
                 StartCoroutine(JumpCooldown());
             }
