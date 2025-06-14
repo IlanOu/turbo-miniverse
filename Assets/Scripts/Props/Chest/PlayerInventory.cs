@@ -22,11 +22,11 @@ namespace Props.Chest
             public KeyType keyType;
             public float angle;
             
-            public KeyInfo(GameObject obj, KeyType type)
+            public KeyInfo(GameObject obj, KeyType type, float initialAngle)
             {
                 keyObject = obj;
                 keyType = type;
-                angle = Random.Range(0f, 360f);
+                angle = initialAngle;
             }
         }
         
@@ -75,6 +75,21 @@ namespace Props.Chest
             }
         }
         
+        // Méthode pour redistribuer uniformément les angles des clés
+        private void RedistributeKeyAngles()
+        {
+            int keyCount = floatingKeys.Count;
+            if (keyCount <= 1) return; // Pas besoin de redistribuer s'il n'y a qu'une seule clé
+            
+            float angleStep = 360f / keyCount;
+            
+            for (int i = 0; i < keyCount; i++)
+            {
+                // Distribuer uniformément les angles
+                floatingKeys[i].angle = i * angleStep;
+            }
+        }
+        
         public void AddFloatingKey(GameObject key, KeyType keyType)
         {
             // Désactiver tous les colliders
@@ -87,9 +102,20 @@ namespace Props.Chest
                 keyPickup.enabled = false;
             }
             
-            // Créer l'info de clé et l'ajouter immédiatement
-            KeyInfo keyInfo = new KeyInfo(key, keyType);
+            // Calculer un angle initial pour la nouvelle clé
+            float initialAngle = 0f;
+            if (floatingKeys.Count > 0)
+            {
+                // Placer la nouvelle clé à l'opposé de la dernière clé ajoutée
+                initialAngle = (floatingKeys[floatingKeys.Count - 1].angle + 180f) % 360f;
+            }
+            
+            // Créer l'info de clé et l'ajouter
+            KeyInfo keyInfo = new KeyInfo(key, keyType, initialAngle);
             floatingKeys.Add(keyInfo);
+            
+            // Redistribuer les angles pour que toutes les clés soient équidistantes
+            RedistributeKeyAngles();
             
             // Important: Rendre la clé enfant du conteneur AVANT de commencer l'animation
             // Sauvegarder la position et rotation mondiales
@@ -196,6 +222,9 @@ namespace Props.Chest
                 keyToUse.transform.rotation = worldRot;
                 keyToUse.transform.localScale = worldScale;
                 
+                // Redistribuer les angles des clés restantes
+                RedistributeKeyAngles();
+                
                 StartCoroutine(EnhancedConsumeAnimation(keyToUse));
                 
                 Debug.Log($"Clé de type {keyType} utilisée. Restantes : {floatingKeys.Count}");
@@ -212,7 +241,7 @@ namespace Props.Chest
             
             while (elapsed < consumeDuration)
             {
-                if (key == null) yield break;
+                if (!key) yield break;
                 
                 float t = elapsed / consumeDuration;
                 float smoothT = Mathf.SmoothStep(0, 1, t);
@@ -220,7 +249,7 @@ namespace Props.Chest
                 // Mouvement vers le haut avec une trajectoire en arc
                 Vector3 newPos = Vector3.Lerp(startPos, targetPos, smoothT);
                 // Ajouter un petit mouvement latéral pour plus de dynamisme
-                newPos += transform.right * Mathf.Sin(t * Mathf.PI * 2) * 0.3f;
+                newPos += transform.right * (Mathf.Sin(t * Mathf.PI * 2) * 0.3f);
                 key.transform.position = newPos;
                 
                 // Rotation qui s'accélère

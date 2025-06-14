@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Menu;
 using UnityEngine;
 
 namespace Car
@@ -6,6 +7,7 @@ namespace Car
     public class ChooseCar : MonoBehaviour
     {
         public List<GameObject> cars = new List<GameObject>();
+        public SpeedDisplay speedDisplay;
         
         public void Start()
         {
@@ -26,6 +28,8 @@ namespace Car
             }
             
             cars[carIndex].SetActive(true);
+            cars[carIndex].GetComponentInChildren<CarController>().speedDisplay = speedDisplay;
+            speedDisplay.Initialize(cars[carIndex].GetComponentInChildren<Rigidbody>());
         }
     }
 }

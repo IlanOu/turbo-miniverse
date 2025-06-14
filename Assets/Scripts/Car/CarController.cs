@@ -1,5 +1,5 @@
 using System.Collections;
-using TMPro;
+using Menu;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,7 +26,9 @@ namespace Car
         [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
         [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
         [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
-        [SerializeField] private TextMeshProUGUI speedText;
+        
+        [Header("UI Components")]
+        public SpeedDisplay speedDisplay;
 
         [Header("Jump Settings")] [SerializeField]
         private float jumpForce = 10f;
@@ -51,6 +53,7 @@ namespace Car
 
         public bool IsDrifting => _isDrifting;
         public bool CanJump => _canJump;
+        public float CurrentSpeed => _currentSpeed;
 
         public UnityEvent onJump;
         
@@ -60,6 +63,12 @@ namespace Car
             _originalDrag = _carRigidbody.linearDamping;
             InitializeRigidbody();
             ConfigureWheelColliders();
+            
+            // Initialiser l'affichage de vitesse
+            if (speedDisplay != null)
+            {
+                speedDisplay.Initialize(_carRigidbody);
+            }
         }
 
         private void InitializeRigidbody()
@@ -112,7 +121,7 @@ namespace Car
             HandleSteering();
             UpdateWheels();
             ApplyAdditionalGravity();
-            UpdateUI();
+            UpdateSpeedValue();
             HandleAudio();
             CheckDrifting();
             AdjustGripDuringTurning();
@@ -268,8 +277,23 @@ namespace Car
             _horizontalInput = Input.GetAxis("Horizontal");
             _verticalInput = Input.GetAxis("Vertical");
             _isBraking = Input.GetKey(KeyCode.LeftShift);
-            _currentSpeed = _carRigidbody.linearVelocity.magnitude * 3.6f;
         }
+        
+        private void UpdateSpeedValue()
+        {
+            // Ignorer la composante verticale (Y) pour calculer uniquement la vitesse horizontale
+            Vector3 horizontalVelocity = new Vector3(_carRigidbody.linearVelocity.x, 0, _carRigidbody.linearVelocity.z);
+    
+            // Mettre à jour la valeur de vitesse interne (en km/h)
+            _currentSpeed = horizontalVelocity.magnitude * 3.6f;
+    
+            // Mettre à jour l'affichage de vitesse si disponible
+            if (speedDisplay != null)
+            {
+                speedDisplay.UpdateSpeed(_currentSpeed);
+            }
+        }
+
 
         public bool IsAccelerating()
         {
@@ -282,7 +306,7 @@ namespace Car
 
             if (_isStoppingCar)
             {
-                // Maintenir les freins appliqués pendant l'arrêt
+                                // Maintenir les freins appliqués pendant l'arrêt
                 _currentBrakeForce = config.motorSettings.brakeForce;
                 ApplyBraking();
                 return;
@@ -359,14 +383,6 @@ namespace Car
             wheelTransform.rotation = rot;
         }
 
-        private void UpdateUI()
-        {
-            if (speedText)
-            {
-                speedText.text = Mathf.Round(_currentSpeed).ToString() + " km/h";
-            }
-        }
-
         public void UpdateWheelSettings(WheelSettings newSettings)
         {
             config.wheelSettings = newSettings;
@@ -434,9 +450,12 @@ namespace Car
 
             // Réinitialiser la vitesse actuelle
             _currentSpeed = 0f;
-
-            // Mettre à jour l'interface utilisateur
-            UpdateUI();
+            
+            // Mettre à jour l'affichage de vitesse
+            if (speedDisplay != null)
+            {
+                speedDisplay.UpdateSpeed(0f);
+            }
 
             // Arrêter le son du moteur
             if (electricCarSound != null)
@@ -463,3 +482,4 @@ namespace Car
         }
     }
 }
+
