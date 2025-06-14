@@ -24432,7 +24432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 4
+  outlineMode: 2
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2
   precomputeOutline: 0
@@ -47527,7 +47527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 4
+  outlineMode: 2
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2
   precomputeOutline: 0
@@ -57628,7 +57628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1328627658059323080, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: outlineMode
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1553375943791843549, guid: d85455fd87a39444c9b5494d56cb6d86, type: 3}
       propertyPath: m_TagString
@@ -58551,6 +58551,10 @@ PrefabInstance:
     - target: {fileID: 3493978498974766941, guid: c8b9100929b2fbd4db0182c17b5291f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4651815778949906258, guid: c8b9100929b2fbd4db0182c17b5291f8, type: 3}
+      propertyPath: collectAnimDuration
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
