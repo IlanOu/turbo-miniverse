@@ -22,6 +22,7 @@ namespace Menu
         [SerializeField] private Button nextButton;
         [SerializeField] private TextMeshProUGUI carNameText;
         [SerializeField] private TextMeshProUGUI carStatsText;
+        [SerializeField] private TextMeshProUGUI carDescriptionText;
         [SerializeField] private Button actionButton;
         [SerializeField] private TextMeshProUGUI actionButtonText;
         [SerializeField] private Image carPreviewImage;
@@ -187,6 +188,9 @@ namespace Menu
 
             if (carStatsText != null)
                 exitSequence.Join(carStatsText.DOFade(0, switchCarAnimDuration / 2));
+            
+            if (carDescriptionText != null)
+                exitSequence.Join(carDescriptionText.DOFade(0, switchCarAnimDuration / 2));
 
             // Après la sortie, mettre à jour les données et animer l'entrée
             exitSequence.OnComplete(() =>
@@ -213,6 +217,9 @@ namespace Menu
 
                 if (carStatsText != null)
                     enterSequence.Join(carStatsText.DOFade(1, switchCarAnimDuration / 2).SetDelay(0.1f));
+                
+                if (carDescriptionText != null)
+                    enterSequence.Join(carDescriptionText.DOFade(1, switchCarAnimDuration / 2).SetDelay(0.15f));
 
                 enterSequence.OnComplete(() => { isAnimating = false; });
             });
@@ -255,8 +262,12 @@ namespace Menu
             {
                 carStatsText.text = $"<b>Vitesse:</b>\n {GenerateStars(data.speed)}\n" +
                                     $"<b>Accélération:</b>\n {GenerateStars(data.acceleration)}\n" +
-                                    $"<b>Maniabilité:</b>\n {GenerateStars(data.handling)}\n\n" +
-                                    $"{data.description}";
+                                    $"<b>Maniabilité:</b>\n {GenerateStars(data.handling)}";
+            }
+            
+            if (carDescriptionText != null)
+            {
+                carDescriptionText.text = data.description;
             }
 
             // Mise à jour du bouton d'action
@@ -518,6 +529,14 @@ namespace Menu
                         .SetRelative(true).SetEase(closeEase).SetDelay(delay));
                     delay += staggerDelay;
                 }
+                
+                if (carDescriptionText != null)
+                {
+                    closeSequence.Join(carDescriptionText.DOFade(0, closeAnimDuration * 0.8f).SetDelay(delay));
+                    closeSequence.Join(carDescriptionText.transform.DOLocalMoveY(-20f, closeAnimDuration * 0.8f)
+                        .SetRelative(true).SetEase(closeEase).SetDelay(delay));
+                    delay += staggerDelay;
+                }
 
                 // Animer l'image en dernier avec un effet plus prononcé
                 if (carPreviewImage != null)
@@ -684,6 +703,9 @@ namespace Menu
 
                 if (carStatsText != null)
                     carStatsText.alpha = 0;
+                
+                if (carDescriptionText != null)
+                    carDescriptionText.alpha = 0;
 
                 // Préparer tous les boutons
                 foreach (Button button in allButtons)
@@ -756,6 +778,14 @@ namespace Menu
                 {
                     openSequence.Join(carStatsText.DOFade(1, openAnimDuration).SetDelay(delay));
                     openSequence.Join(carStatsText.transform.DOLocalMoveY(20f, openAnimDuration).SetRelative(true)
+                        .SetEase(openEase).SetDelay(delay));
+                    delay += staggerDelay;
+                }
+                
+                if (carDescriptionText != null)
+                {
+                    openSequence.Join(carDescriptionText.DOFade(1, openAnimDuration).SetDelay(delay));
+                    openSequence.Join(carDescriptionText.transform.DOLocalMoveY(20f, openAnimDuration).SetRelative(true)
                         .SetEase(openEase).SetDelay(delay));
                     delay += staggerDelay;
                 }
@@ -931,6 +961,7 @@ namespace Menu
             DOTween.Kill(carPreviewImage);
             DOTween.Kill(carNameText);
             DOTween.Kill(carStatsText);
+            DOTween.Kill(carDescriptionText);
 
             foreach (Button button in allButtons)
             {
