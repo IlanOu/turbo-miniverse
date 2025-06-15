@@ -204,8 +204,8 @@ namespace Car
         {
             if (_canJump && Input.GetKey(_jumpKey) && IsGrounded())
             {
-                _carRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 onJump.Invoke();
+                _carRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 _canJump = false;
                 StartCoroutine(JumpCooldown());
             }

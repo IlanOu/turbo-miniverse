@@ -48,6 +48,14 @@ public class AudioPlaylistManager : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.loop = false;
         audioSource.volume = volume;
+        audioSource.spatialBlend = 1f;
+        audioSource.spatialize = true;
+        audioSource.spatializePostEffects = true;
+        audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        audioSource.minDistance = 10f;
+        audioSource.maxDistance = 400f;
+        audioSource.dopplerLevel = 0f;
+        
 
         if (shuffle)
         {

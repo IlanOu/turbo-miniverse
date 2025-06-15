@@ -50,7 +50,7 @@ MonoBehaviour:
   frequency: 1
   rotationSpeed: 90
   coinValue: 10
-  collectSound: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: d3561ada6ee075c4591c5ee8650f2593, type: 3}
   collectDuration: 0.25
   collectHeight: 2
 --- !u!65 &2319178768961064746
