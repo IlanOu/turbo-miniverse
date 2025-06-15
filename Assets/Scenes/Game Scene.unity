@@ -164,7 +164,6 @@ GameObject:
   - component: {fileID: 6115249}
   - component: {fileID: 6115253}
   - component: {fileID: 6115255}
-  - component: {fileID: 6115254}
   m_Layer: 5
   m_Name: Next
   m_TagString: Untagged
@@ -277,19 +276,6 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
   falloffDistance: 1
---- !u!114 &6115254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6115247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!114 &6115255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2412,6 +2398,7 @@ GameObject:
   - component: {fileID: 121194060}
   - component: {fileID: 121194059}
   - component: {fileID: 121194062}
+  - component: {fileID: 121194063}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2524,6 +2511,26 @@ MonoBehaviour:
   pointerCursor: {fileID: 2800000, guid: 68dc85a403a107743812decec7417a55, type: 3}
   pointerHotspot: {x: 8, y: 4}
   fixedCursorSize: {x: 32, y: 32}
+--- !u!114 &121194063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121194057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6113edbf594936a37283911c9e347e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSound: {fileID: 8300000, guid: 3d36cbc60dc639548a9c7757c46ad32c, type: 3}
+  hoverSound: {fileID: 8300000, guid: 81e0897d474ae1f45a260441aa61904a, type: 3}
+  clickVolume: 0.7
+  hoverVolume: 0.5
+  minTimeBetweenHoverSounds: 0.1
+  playHoverSound: 1
+  useButtonSpecificSounds: 0
+  buttonSoundTag: ButtonSound
 --- !u!1001 &124109376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6680,7 +6687,6 @@ GameObject:
   - component: {fileID: 327935296}
   - component: {fileID: 327935300}
   - component: {fileID: 327935302}
-  - component: {fileID: 327935301}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -6793,19 +6799,6 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
   falloffDistance: 1
---- !u!114 &327935301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327935294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!114 &327935302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20700,7 +20693,6 @@ GameObject:
   - component: {fileID: 938524695}
   - component: {fileID: 938524699}
   - component: {fileID: 938524701}
-  - component: {fileID: 938524700}
   m_Layer: 5
   m_Name: Previous
   m_TagString: Untagged
@@ -20813,19 +20805,6 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
   falloffDistance: 1
---- !u!114 &938524700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938524693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!114 &938524701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37355,6 +37334,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3493978498974766941, guid: 3d4588120c9b3d34c904b5d083883d1a, type: 3}
   m_PrefabInstance: {fileID: 1970599405}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1726933538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1726933539}
+  - component: {fileID: 1726933540}
+  m_Layer: 0
+  m_Name: AudioPlayerUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1726933539
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726933538}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2030853976}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1726933540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726933538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 681bcf86611c4749b0c2427d054309ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playlistManager: {fileID: 1977864605}
+  previousButton: {fileID: 938524695}
+  playPauseButton: {fileID: 327935296}
+  nextButton: {fileID: 6115249}
+  titleText: {fileID: 996840782}
+  artistText: {fileID: 1335193205}
+  playPauseIcon: {fileID: 733742424}
+  playSprite: {fileID: 21300000, guid: d4a8a94e72828c84c80ebb5b07cb907d, type: 3}
+  pauseSprite: {fileID: 21300000, guid: b8ce815ffda69934fbb6131facfd41e5, type: 3}
+  titleContainer: {fileID: 1643214180}
+  scrollSpeed: 50
+  scrollDelay: 1.5
+  scrollPadding: 50
+  buttonPressScale: 0.9
+  buttonPressDuration: 0.1
+  trackChangeFadeDuration: 0.5
+  buttonEase: 27
+  textFadeEase: 6
 --- !u!1001 &1727581921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37506,7 +37547,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1735944923}
   - component: {fileID: 1735944925}
-  - component: {fileID: 1735944926}
   - component: {fileID: 1735944928}
   - component: {fileID: 1735944927}
   m_Layer: 5
@@ -37547,36 +37587,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735944922}
   m_CullTransparentMesh: 1
---- !u!114 &1735944926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735944922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 681bcf86611c4749b0c2427d054309ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playlistManager: {fileID: 1977864605}
-  previousButton: {fileID: 938524695}
-  playPauseButton: {fileID: 327935296}
-  nextButton: {fileID: 6115249}
-  titleText: {fileID: 996840782}
-  artistText: {fileID: 1335193205}
-  playPauseIcon: {fileID: 733742424}
-  playSprite: {fileID: 21300000, guid: d4a8a94e72828c84c80ebb5b07cb907d, type: 3}
-  pauseSprite: {fileID: 21300000, guid: b8ce815ffda69934fbb6131facfd41e5, type: 3}
-  titleContainer: {fileID: 1643214180}
-  scrollSpeed: 50
-  scrollDelay: 1.5
-  scrollPadding: 50
-  buttonPressScale: 0.9
-  buttonPressDuration: 0.1
-  trackChangeFadeDuration: 0.5
-  buttonEase: 27
-  textFadeEase: 6
 --- !u!114 &1735944927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42461,6 +42471,7 @@ Transform:
   - {fileID: 224406237}
   - {fileID: 683431855}
   - {fileID: 1088726710}
+  - {fileID: 1726933539}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2033493691

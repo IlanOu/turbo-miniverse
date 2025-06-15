@@ -127,21 +127,19 @@ public class AudioVisualizerPulse : MonoBehaviour
     {
         // Vérifier si la musique est en cours de lecture
         bool isPlaying = (playlistManager != null) ? playlistManager.IsPlaying : true;
-        
+    
         if (!isPlaying)
         {
             // Réinitialiser l'échelle si la musique n'est pas en cours de lecture
             objectToPulse.localScale = originalScale;
             return;
         }
-        
-        // Vérifier si la piste a changé (double vérification)
-        if (playlistManager != null && playlistManager.CurrentTrack != null)
+    
+        // Vérifier si la piste a changé, mais seulement si nécessaire
+        if (playlistManager != null && playlistManager.CurrentTrack != null && 
+            string.IsNullOrEmpty(currentTrackTitle) || playlistManager.CurrentTrack.title != currentTrackTitle)
         {
-            if (playlistManager.CurrentTrack.title != currentTrackTitle)
-            {
-                OnTrackChanged(playlistManager.CurrentTrack);
-            }
+            OnTrackChanged(playlistManager.CurrentTrack);
         }
         
         // Incrémenter le timer
