@@ -5404,7 +5404,8 @@ MonoBehaviour:
   animationDuration: 0.5
   delayBetweenButtons: 0.2
   slideDistance: 500
-  easeType: 27
+  easeInType: 26
+  easeOutType: 27
   togglePauseKey: 27
 --- !u!1001 &273584610
 PrefabInstance:
@@ -29320,6 +29321,8 @@ MonoBehaviour:
     buttonSprite: {fileID: 21300000, guid: d865dbc9c6b6e0146a2f5dfb961cbd50, type: 3}
   - commandDescription: "Frein \xE0 main"
     buttonSprite: {fileID: 21300000, guid: ff121778a833ee14f9f0e8cc78020235, type: 3}
+  - commandDescription: Se tp au garage
+    buttonSprite: {fileID: 21300000, guid: 8d12962e014019e45b12ac4388146645, type: 3}
   - commandDescription: Interagir
     buttonSprite: {fileID: 21300000, guid: fe84ef291a463fd4bae61639630a8370, type: 3}
   - commandDescription: Pause
