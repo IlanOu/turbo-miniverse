@@ -15,7 +15,7 @@ namespace Menu
         private ChooseCar carSelector;
 
         [SerializeField] private Transform carSpawnPoint;
-
+        
         [Header("UI Elements")] [SerializeField]
         private Button previousButton;
 
@@ -863,6 +863,7 @@ namespace Menu
 // Méthode pour ajouter des effets de survol aux boutons
         private void AddHoverEffect(Button button)
         {
+            
             // Ajouter des écouteurs d'événements pour le survol
             EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>() ??
                                    button.gameObject.AddComponent<EventTrigger>();

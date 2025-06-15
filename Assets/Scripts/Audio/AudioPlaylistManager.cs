@@ -40,6 +40,9 @@ public class AudioPlaylistManager : MonoBehaviour
 
     private void Awake()
     {
+        // Initialiser le générateur de nombres aléatoires avec un seed basé sur le temps
+        Random.InitState((int)System.DateTime.Now.Ticks);
+    
         // Une seule source audio
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
@@ -52,13 +55,24 @@ public class AudioPlaylistManager : MonoBehaviour
         }
     }
 
+
     private void Start()
     {
         if (playOnAwake && playlist.Count > 0)
         {
-            PlayTrack(0);
+            if (shuffle)
+            {
+                // Jouer la première piste de la liste mélangée
+                PlayTrack(shuffledIndices[0]);
+            }
+            else
+            {
+                // Jouer la première piste normalement
+                PlayTrack(0);
+            }
         }
     }
+
 
     private void Update()
     {
