@@ -441,6 +441,7 @@ GameObject:
   - component: {fileID: 710295505}
   - component: {fileID: 710295509}
   - component: {fileID: 710295510}
+  - component: {fileID: 710295511}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -568,6 +569,23 @@ MonoBehaviour:
   playHoverSound: 1
   useButtonSpecificSounds: 0
   buttonSoundTag: ButtonSound
+--- !u!114 &710295511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710295504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d4803b00604af887b681ccde030e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultCursor: {fileID: 2800000, guid: 3f3182aa7d1f91a4c89202bf510ff6e0, type: 3}
+  defaultHotspot: {x: 4, y: 4}
+  pointerCursor: {fileID: 2800000, guid: 68dc85a403a107743812decec7417a55, type: 3}
+  pointerHotspot: {x: 8, y: 4}
+  fixedCursorSize: {x: 32, y: 32}
 --- !u!224 &764383342 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1501288716807851473, guid: f7ba959c1bc4c644c9c14bbf1ca2ca34, type: 3}
