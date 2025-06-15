@@ -3,6 +3,8 @@ using Car;
 using Menu;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
+using UnityEngine.UI;
 
 namespace Builds
 {
@@ -14,9 +16,18 @@ namespace Builds
         [Header("Prompt UI")]
         [SerializeField] private GameObject promptUI;
         [SerializeField] private TextMeshProUGUI promptText;
+        [SerializeField] private Image keyImage;
+        
+        [Header("Animation")]
+        [SerializeField] private float pulseDuration = 0.5f;
+        [SerializeField] private float pulseScale = 1.2f;
+        [SerializeField] private Ease pulseEaseType = Ease.InOutSine;
+        [SerializeField] private float fadeInDuration = 0.3f;
+        [SerializeField] private float fadeOutDuration = 0.2f;
         
         private bool playerInTrigger = false;
         private bool garageOpen = false;
+        private Sequence pulseSequence;
 
         private void Start()
         {
@@ -29,6 +40,15 @@ namespace Builds
             if (promptUI != null)
             {
                 promptUI.SetActive(false);
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            // Nettoyer les animations DOTween
+            if (pulseSequence != null && pulseSequence.IsActive())
+            {
+                pulseSequence.Kill();
             }
         }
         
@@ -72,12 +92,38 @@ namespace Builds
         {
             if (promptUI != null)
             {
+                // Activer le GameObject
                 promptUI.SetActive(true);
                 
                 // Mettre à jour le texte du prompt si nécessaire
                 if (promptText != null)
                 {
                     promptText.text = $"E";
+                }
+                
+                // Animer l'apparition avec DOTween
+                if (promptUI.GetComponent<CanvasGroup>() == null)
+                {
+                    promptUI.AddComponent<CanvasGroup>();
+                }
+                
+                CanvasGroup canvasGroup = promptUI.GetComponent<CanvasGroup>();
+                canvasGroup.alpha = 0f;
+                canvasGroup.DOFade(1f, fadeInDuration);
+                
+                // Animer l'image de la touche avec un effet de pulsation
+                if (keyImage != null)
+                {
+                    // Réinitialiser l'échelle
+                    keyImage.transform.localScale = Vector3.one;
+                    
+                    // Créer une séquence de pulsation
+                    pulseSequence = DOTween.Sequence();
+                    
+                    // Ajouter les animations de pulsation
+                    pulseSequence.Append(keyImage.transform.DOScale(pulseScale, pulseDuration / 2).SetEase(pulseEaseType))
+                                .Append(keyImage.transform.DOScale(1f, pulseDuration / 2).SetEase(pulseEaseType))
+                                .SetLoops(-1); // Répéter indéfiniment
                 }
             }
         }
@@ -86,7 +132,24 @@ namespace Builds
         {
             if (promptUI != null)
             {
-                promptUI.SetActive(false);
+                // Arrêter l'animation de pulsation
+                if (pulseSequence != null && pulseSequence.IsActive())
+                {
+                    pulseSequence.Kill();
+                }
+                
+                // Animer la disparition avec DOTween
+                CanvasGroup canvasGroup = promptUI.GetComponent<CanvasGroup>();
+                if (canvasGroup != null)
+                {
+                    canvasGroup.DOFade(0f, fadeOutDuration).OnComplete(() => {
+                        promptUI.SetActive(false);
+                    });
+                }
+                else
+                {
+                    promptUI.SetActive(false);
+                }
             }
         }
 

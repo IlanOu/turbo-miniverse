@@ -10,20 +10,21 @@ public class PauseMenuManager : MonoBehaviour
     [Header("Références")]
     [SerializeField] private GameObject pauseMenuPanel;
     [SerializeField] private List<RectTransform> menuButtons = new List<RectTransform>();
-    
+
     [Header("Animation")]
     [SerializeField] private float animationDuration = 0.3f;
     [SerializeField] private float delayBetweenButtons = 0.1f;
     [SerializeField] private float slideDistance = 50f;
-    [SerializeField] private Ease easeType = Ease.OutBack;
-    
-    
+    [SerializeField] private Ease easeInType = Ease.InBack;
+    [SerializeField] private Ease easeOutType = Ease.OutBack;
+
     [Header("Boutons")]
     [SerializeField] private KeyCode togglePauseKey = KeyCode.Escape;
     private bool isPaused = false;
     private bool isAnimating = false;
     private Vector3[] originalPositions;
-    
+    private List<Tween> activeTweens = new List<Tween>();
+
     void Start()
     {
         // Cacher le menu au démarrage
@@ -36,7 +37,13 @@ public class PauseMenuManager : MonoBehaviour
             originalPositions[i] = menuButtons[i].localPosition;
         }
     }
-    
+
+    void OnDestroy()
+    {
+        // Nettoyer toutes les animations en cours
+        KillAllTweens();
+    }
+
     void Update()
     {
         // Vérifier si la touche configurée est pressée et qu'aucune animation n'est en cours
@@ -45,7 +52,7 @@ public class PauseMenuManager : MonoBehaviour
             TogglePause();
         }
     }
-    
+
     public void TogglePause()
     {
         // Ne rien faire si une animation est en cours
@@ -63,11 +70,27 @@ public class PauseMenuManager : MonoBehaviour
             HidePauseMenu();
         }
     }
-    
+
+    private void KillAllTweens()
+    {
+        // Arrêter toutes les animations en cours
+        foreach (var tween in activeTweens)
+        {
+            if (tween != null && tween.IsActive())
+            {
+                tween.Kill();
+            }
+        }
+        activeTweens.Clear();
+    }
+
     private void ShowPauseMenu()
     {
         // Marquer le début de l'animation
         isAnimating = true;
+        
+        // Arrêter toutes les animations en cours
+        KillAllTweens();
         
         // Mettre le jeu en pause
         Time.timeScale = 0f;
@@ -78,34 +101,45 @@ public class PauseMenuManager : MonoBehaviour
         // Animer les boutons un par un
         for (int i = 0; i < menuButtons.Count; i++)
         {
-            // Position initiale (depuis le haut)
+            // Réinitialiser la position initiale (depuis le haut)
             Vector3 startPos = originalPositions[i] + new Vector3(0, slideDistance, 0);
             menuButtons[i].localPosition = startPos;
             
             // Animer vers la position originale
-            menuButtons[i].DOLocalMove(originalPositions[i], animationDuration)
+            Tween tween = menuButtons[i].DOLocalMove(originalPositions[i], animationDuration)
                 .SetDelay(i * delayBetweenButtons)
-                .SetEase(easeType)
+                .SetEase(easeOutType)
                 .SetUpdate(true); // Important pour que l'animation fonctionne quand le jeu est en pause
+            
+            activeTweens.Add(tween);
         }
         
         // Calculer la durée totale de l'animation
         float totalAnimationTime = animationDuration + ((menuButtons.Count - 1) * delayBetweenButtons);
         
         // Marquer la fin de l'animation après que toutes les animations soient terminées
-        DOVirtual.DelayedCall(totalAnimationTime, () => {
+        Tween delayTween = DOVirtual.DelayedCall(totalAnimationTime, () => {
             isAnimating = false;
+            activeTweens.Clear();
         }, true);
+        
+        activeTweens.Add(delayTween);
     }
-    
+
     private void HidePauseMenu()
     {
         // Marquer le début de l'animation
         isAnimating = true;
         
+        // Arrêter toutes les animations en cours
+        KillAllTweens();
+        
         // Animer les boutons en séquence inverse
         for (int i = 0; i < menuButtons.Count; i++)
         {
+            // S'assurer que chaque bouton est à sa position d'origine avant de commencer l'animation
+            menuButtons[i].localPosition = originalPositions[i];
+            
             // Position finale (vers le haut)
             Vector3 endPos = originalPositions[i] + new Vector3(0, slideDistance, 0);
             
@@ -113,25 +147,36 @@ public class PauseMenuManager : MonoBehaviour
             int reverseIndex = menuButtons.Count - 1 - i;
             
             // Animer vers la position hors écran
-            menuButtons[reverseIndex].DOLocalMove(endPos, animationDuration)
+            Tween tween = menuButtons[reverseIndex].DOLocalMove(endPos, animationDuration)
                 .SetDelay(i * delayBetweenButtons)
-                .SetEase(Ease.InBack)
+                .SetEase(easeInType)
                 .SetUpdate(true);
+            
+            activeTweens.Add(tween);
         }
         
         // Calculer la durée totale de l'animation
         float totalAnimationTime = animationDuration + ((menuButtons.Count - 1) * delayBetweenButtons);
         
         // Désactiver le panneau après la dernière animation
-        DOVirtual.DelayedCall(totalAnimationTime, () => {
+        Tween delayTween = DOVirtual.DelayedCall(totalAnimationTime, () => {
+            // Réinitialiser les positions des boutons
+            for (int i = 0; i < menuButtons.Count; i++)
+            {
+                menuButtons[i].localPosition = originalPositions[i];
+            }
+            
             pauseMenuPanel.SetActive(false);
             // Reprendre le jeu
             Time.timeScale = 1f;
             // Marquer la fin de l'animation
             isAnimating = false;
+            activeTweens.Clear();
         }, true);
+        
+        activeTweens.Add(delayTween);
     }
-    
+
     // Fonctions pour les boutons
     public void ResumeGame()
     {
@@ -141,19 +186,19 @@ public class PauseMenuManager : MonoBehaviour
             
         TogglePause();
     }
-    
+
     public void RestartLevel()
     {
         Time.timeScale = 1f; // Rétablir le temps normal
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    
+
     public void QuitToMainMenu(string mainMenuSceneName)
     {
         Time.timeScale = 1f; // Rétablir le temps normal
         SceneManager.LoadScene(mainMenuSceneName); // Remplacer par le nom de votre scène de menu principal
     }
-    
+
     public void QuitGame()
     {
         #if UNITY_EDITOR
